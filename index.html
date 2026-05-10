@@ -1,548 +1,1053 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEO Analysis & Strategy for Semiconductor Brands</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f6f8fa;
+  --color-background-tertiary: #eaeef2;
+  --color-text-primary: #1f2328;
+  --color-text-secondary: #656d76;
+  --color-text-tertiary: #9198a1;
+  --color-border-primary: #d0d7de;
+  --color-border-secondary: #d8dee4;
+  --color-border-tertiary: #eaeef2;
+  --border-radius-md: 6px;
+  --border-radius-lg: 10px;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans)}
-.page{padding:2rem 1.5rem;border-bottom:0.5px solid var(--color-border-tertiary)}
-.page:last-child{border-bottom:none}
-.page-label{font-size:11px;font-weight:500;letter-spacing:.12em;color:var(--color-text-tertiary);text-transform:uppercase;margin-bottom:.5rem}
-.page-title{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:1.5rem;line-height:1.3}
+body{font-family:var(--font-sans);background:var(--color-background-primary);color:var(--color-text-primary)}
 
 /* NAV */
-nav{display:flex;gap:6px;padding:1rem 1.5rem;border-bottom:0.5px solid var(--color-border-tertiary);flex-wrap:wrap;position:sticky;top:0;background:var(--color-background-primary);z-index:10}
-.nav-btn{font-size:12px;padding:5px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
-.nav-btn.active{background:var(--color-background-tertiary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500}
+nav{display:flex;gap:6px;padding:.75rem 1.5rem;border-bottom:0.5px solid var(--color-border-tertiary);flex-wrap:wrap;position:sticky;top:0;background:var(--color-background-primary);z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.nav-btn{font-size:12px;padding:5px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px}
+.nav-btn.active{background:var(--color-text-primary);color:#fff;border-color:var(--color-text-primary);font-weight:500}
+.nav-btn:hover:not(.active){background:var(--color-background-secondary)}
 
-/* COVER */
-.cover-hero{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
-.cover-title{grid-column:1/-1;padding:1.5rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary)}
-.cover-title h1{font-size:26px;font-weight:500;color:var(--color-text-primary);margin-bottom:.4rem}
-.cover-title p{font-size:14px;color:var(--color-text-secondary)}
-.ai-card{padding:1rem;border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
-.ai-card .ai-icon{font-size:24px;margin-bottom:.6rem}
-.ai-card .ai-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:.3rem}
-.ai-card .ai-logic{font-size:12px;color:var(--color-text-secondary);margin-bottom:.6rem}
+/* PAGE */
+.page{padding:2rem 1.5rem;max-width:1200px;margin:0 auto}
+.page-label{font-size:10px;font-weight:600;letter-spacing:.14em;color:var(--color-text-tertiary);text-transform:uppercase;margin-bottom:.4rem;display:flex;align-items:center;gap:5px}
+.section-title{font-size:18px;font-weight:600;color:var(--color-text-primary);margin-bottom:1.25rem;line-height:1.3}
+.section-subtitle{font-size:12px;color:var(--color-text-secondary);margin-bottom:1.25rem;line-height:1.6}
+
+/* TAGS */
 .tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 8px;border-radius:var(--border-radius-md);margin:2px;font-weight:500}
 .tag-blue{background:#E6F1FB;color:#0C447C}
-.tag-amber{background:#FAEEDA;color:#633806}
+.tag-amber{background:#FFF3DC;color:#633806}
 .tag-teal{background:#E1F5EE;color:#085041}
 .tag-purple{background:#EEEDFE;color:#3C3489}
-.tag-coral{background:#FAECE7;color:#712B13}
 .tag-gray{background:#F1EFE8;color:#444441}
-.core-principle{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border-left:3px solid #BA7517}
-.core-principle i{font-size:20px;color:#BA7517}
-.core-principle strong{font-size:15px;color:var(--color-text-primary)}
-.core-principle span{font-size:13px;color:var(--color-text-secondary)}
 
-/* MATRIX TABLE */
+/* BRAND LOGOS */
+.brand-logo{height:22px;width:auto;object-fit:contain;vertical-align:middle}
+.brand-logo-sm{height:16px;width:auto;object-fit:contain;vertical-align:middle}
+.logo-fallback{display:inline-flex;align-items:center;justify-content:center;height:22px;padding:0 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.05em}
+
+/* ─── PAGE 0: OVERVIEW ─── */
+.cover-header{padding:1.5rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);margin-bottom:1.25rem}
+.cover-header h1{font-size:24px;font-weight:600;color:var(--color-text-primary);margin-bottom:.3rem}
+.cover-header p{font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem}
+.ai-tools-row{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.ai-tool-badge{display:flex;align-items:center;gap:7px;padding:5px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:12px;font-weight:500;background:var(--color-background-primary)}
+.ai-tool-badge.gpt{border-color:#2188FF;color:#0C447C;background:#f0f6ff}
+.ai-tool-badge.gem{border-color:#FFCB2F;color:#7A5500;background:#fffbeb}
+.ai-tool-badge.cla{border-color:#DA7756;color:#7A2E1A;background:#fff5f2}
+.ai-tools-label{font-size:11px;color:var(--color-text-tertiary);font-weight:500}
+
+/* Integrated ranking */
+.int-rank-header{display:flex;flex-direction:column;gap:.25rem;margin-bottom:1rem}
+.int-rank-header .sub{font-size:11px;color:var(--color-text-secondary);font-style:italic}
+.int-rank-header .flow-path{font-size:11px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.flow-node{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:2px 8px;font-size:11px;color:var(--color-text-secondary)}
+.int-rank-list{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem;margin-bottom:1.5rem}
+@media(max-width:700px){.int-rank-list{grid-template-columns:repeat(2,1fr)}}
+.int-rank-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:.9rem 1rem;background:var(--color-background-primary);position:relative}
+.int-rank-card.top1{border-color:#FFCB2F;background:#fffdf0}
+.rank-badge{font-size:10px;font-weight:700;color:var(--color-text-tertiary);margin-bottom:.5rem;display:flex;align-items:center;gap:4px}
+.rank-badge.r1{color:#BA7517}
+.int-rank-card .logo-wrap{height:28px;display:flex;align-items:center;margin-bottom:.5rem}
+.int-rank-metrics{display:flex;flex-direction:column;gap:3px;margin-top:.5rem}
+.metric-row{display:flex;align-items:center;justify-content:space-between;font-size:11px}
+.metric-label{color:var(--color-text-tertiary)}
+.metric-val{font-weight:600}
+.metric-vis{color:var(--color-text-secondary)}
+.metric-surv{color:#185FA5}
+
+/* Cross-AI survival share */
+.final-share-box{padding:1.25rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);margin-bottom:1.25rem}
+.final-share-box h3{font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:1rem}
+.share-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:600px){.share-grid{grid-template-columns:1fr}}
+.share-col{}
+.share-col-header{display:flex;align-items:center;gap:7px;margin-bottom:.6rem;font-size:12px;font-weight:600;padding-bottom:.5rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.share-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.share-brand-logo{height:14px;width:40px;object-fit:contain;object-position:left}
+.share-bar-wrap{flex:1;display:flex;flex-direction:column;gap:2px}
+.share-bar-track{height:5px;background:var(--color-background-primary);border-radius:3px;overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.share-bar-vis{height:100%;border-radius:3px;opacity:.45}
+.share-bar-surv{height:100%;border-radius:3px}
+.share-pct{font-size:10px;font-weight:600;width:34px;text-align:right;flex-shrink:0}
+
+/* Stat counters */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-top:1.25rem}
+@media(max-width:600px){.stat-row{grid-template-columns:repeat(2,1fr)}}
+.stat-card{padding:.85rem 1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary)}
+.stat-num{font-size:22px;font-weight:700;color:var(--color-text-primary)}
+.stat-label{font-size:11px;color:var(--color-text-secondary);margin-top:.15rem}
+
+/* Core principle banner */
+.core-banner{display:flex;align-items:flex-start;gap:12px;padding:1rem 1.25rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border-left:3px solid #BA7517;margin-top:1.25rem}
+.core-banner i{font-size:18px;color:#BA7517;flex-shrink:0;margin-top:1px}
+.core-banner strong{font-size:14px;color:var(--color-text-primary)}
+.core-banner span{font-size:12px;color:var(--color-text-secondary);display:block;margin-top:2px}
+
+/* PAGE FOOTER INSIGHT */
+.page-footer-insight{margin-top:1.75rem;padding:.9rem 1.1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);display:flex;align-items:flex-start;gap:10px}
+.page-footer-insight i{font-size:16px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+.page-footer-insight p{font-size:11.5px;color:var(--color-text-secondary);line-height:1.6}
+.page-footer-insight strong{color:var(--color-text-primary)}
+
+/* ─── PAGE 1: GEO MATRIX ─── */
 .matrix-wrap{overflow-x:auto;margin-bottom:1rem}
-table.matrix{width:100%;border-collapse:collapse;font-size:12px;min-width:700px}
-table.matrix th{padding:8px 10px;font-weight:500;font-size:11px;background:var(--color-background-secondary);color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary);text-align:left;white-space:nowrap}
+table.matrix{width:100%;border-collapse:collapse;font-size:12px;min-width:820px}
+table.matrix th{padding:8px 10px;font-weight:500;font-size:11px;background:var(--color-background-secondary);color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-secondary);text-align:left;white-space:nowrap;border:0.5px solid var(--color-border-tertiary)}
 table.matrix th.gpt-h{background:#E6F1FB;color:#0C447C}
-table.matrix th.gem-h{background:#FAEEDA;color:#633806}
+table.matrix th.gem-h{background:#FFF3DC;color:#633806}
 table.matrix th.cla-h{background:#E1F5EE;color:#085041}
-table.matrix td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top}
-table.matrix tr:last-child td{border-bottom:none}
-table.matrix tr:hover td{background:var(--color-background-secondary)}
-.domain-cell{font-weight:500;font-size:12px}
+table.matrix td{padding:8px 10px;border:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top}
+table.matrix tr:hover td{background:#fafbfc}
+.domain-cell{font-weight:600;font-size:11.5px;margin-bottom:2px}
+.tech-cell{font-size:10.5px;color:var(--color-text-secondary)}
 .comp-cell{font-size:11px;color:var(--color-text-secondary)}
-.vs-cell{display:flex;flex-direction:column;gap:2px;min-width:90px}
-.vis-num{font-size:11px;color:var(--color-text-secondary)}
-.surv-num{font-size:13px;font-weight:500}
-.surv-blue{color:#185FA5}
-.surv-amber{color:#BA7517}
-.surv-teal{color:#0F6E56}
-.brand-pill{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:var(--border-radius-md);margin-bottom:3px;border:0.5px solid}
+.vs-cell{display:flex;flex-direction:column;gap:3px;min-width:108px}
+.brand-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:500;padding:2px 7px;border-radius:var(--border-radius-md);margin-bottom:2px;border:0.5px solid}
 .bp-ti{background:#fff0f0;color:#a32d2d;border-color:#f09595}
 .bp-adi{background:#E6F1FB;color:#0C447C;border-color:#85B7EB}
 .bp-inf{background:#E1F5EE;color:#085041;border-color:#5DCAA5}
-.bp-nxp{background:#FAEEDA;color:#633806;border-color:#EF9F27}
+.bp-nxp{background:#FFF3DC;color:#633806;border-color:#EF9F27}
 .bp-nvi{background:#EAF3DE;color:#27500A;border-color:#97C459}
 .bp-vic{background:#EEEDFE;color:#3C3489;border-color:#AFA9EC}
 .bp-ren{background:#F1EFE8;color:#444441;border-color:#B4B2A9}
-.diff-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
-.dot-same{background:#B4B2A9}
+.vis-row{font-size:10.5px;color:var(--color-text-tertiary)}
+.surv-row{font-size:12px;font-weight:600}
+.surv-blue{color:#185FA5}
+.surv-amber{color:#9A6200}
+.surv-teal{color:#0F6E56}
+.signal-cell{text-align:center;vertical-align:middle}
+.sig-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot-same{background:#C8D6E0}
 .dot-diff{background:#F0997B}
 
-/* METHODOLOGY */
-.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
-.method-card{padding:1rem 1.25rem;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg)}
-.method-card h3{font-size:13px;font-weight:500;color:var(--color-text-secondary);margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
-.persona-list,.domain-list{list-style:none}
-.persona-list li,.domain-list li{font-size:12px;color:var(--color-text-primary);padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:6px}
-.persona-list li:last-child,.domain-list li:last-child{border-bottom:none}
-.flow-chain{display:flex;flex-direction:column;gap:4px}
-.flow-step{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:var(--border-radius-md);font-size:12px;font-weight:500}
-.fs1{background:#E6F1FB;color:#0C447C}
-.fs2{background:#B5D4F4;color:#0C447C}
-.fs3{background:#FAEEDA;color:#633806}
-.fs4{background:#E1F5EE;color:#085041}
-.fs5{background:#EAF3DE;color:#27500A}
-.flow-arrow{text-align:center;color:var(--color-text-tertiary);font-size:12px}
+/* Matrix caption */
+.matrix-caption{font-size:11px;color:var(--color-text-secondary);margin-top:.75rem;display:flex;flex-direction:column;gap:4px}
+.cap-row{display:flex;align-items:center;gap:6px}
 
-/* AI RANKINGS */
+/* Per-AI workflow result blocks */
+.ai-geo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem}
+@media(max-width:700px){.ai-geo-grid{grid-template-columns:1fr}}
+.ai-geo-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.ai-geo-header{padding:.7rem 1rem;display:flex;align-items:center;gap:8px}
+.ai-geo-header.gpt{background:#E6F1FB}
+.ai-geo-header.gem{background:#FFF3DC}
+.ai-geo-header.cla{background:#E1F5EE}
+.ai-geo-header .gh-title{font-size:13px;font-weight:600}
+.ai-geo-header.gpt .gh-title{color:#0C447C}
+.ai-geo-header.gem .gh-title{color:#633806}
+.ai-geo-header.cla .gh-title{color:#085041}
+.ai-geo-header .gh-sub{font-size:10px;color:var(--color-text-secondary);margin-top:1px}
+.ai-geo-body{padding:.85rem 1rem}
+.geo-metric-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.gml{font-size:10.5px;color:var(--color-text-secondary);width:60px;flex-shrink:0;text-align:right}
+.gmt{flex:1;height:7px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+.gmf-gpt{background:#378ADD}
+.gmf-gem{background:#EF9F27}
+.gmf-cla{background:#1D9E75}
+.gmv{font-size:10.5px;font-weight:600;width:36px;text-align:left;flex-shrink:0}
+.gmv-gpt{color:#185FA5}
+.gmv-gem{color:#9A6200}
+.gmv-cla{color:#0F6E56}
+.geo-logo-wrap{height:14px;width:50px;display:inline-flex;align-items:center;flex-shrink:0}
+
+/* ─── PAGE 2: RANKINGS ─── */
+.rank-section-title{font-size:14px;font-weight:600;color:var(--color-text-primary);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:0.5px solid var(--color-border-tertiary)}
 .ai-rank-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+@media(max-width:700px){.ai-rank-grid{grid-template-columns:1fr}}
 .rank-col{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
-.rank-header{padding:.75rem 1rem;display:flex;align-items:center;gap:8px}
+.rank-header{padding:.7rem 1rem}
 .rank-header-gpt{background:#E6F1FB}
-.rank-header-gem{background:#FAEEDA}
+.rank-header-gem{background:#FFF3DC}
 .rank-header-cla{background:#E1F5EE}
-.rank-header .ai-label{font-size:14px;font-weight:500}
+.rank-header .ai-label{font-size:14px;font-weight:600}
 .rank-header-gpt .ai-label{color:#0C447C}
 .rank-header-gem .ai-label{color:#633806}
 .rank-header-cla .ai-label{color:#085041}
-.rank-header .ai-sub{font-size:11px;color:var(--color-text-secondary)}
+.rank-header .ai-sub{font-size:10px;color:var(--color-text-secondary);margin-top:2px}
 .rank-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-top:0.5px solid var(--color-border-tertiary)}
-.rank-item:first-of-type{border-top:0}
-.rank-num{font-size:11px;color:var(--color-text-tertiary);width:16px}
-.rank-brand{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.rank-num{font-size:11px;color:var(--color-text-tertiary);width:20px;flex-shrink:0}
+.rank-num.r1{font-size:14px}
+.rank-logo-wrap{height:18px;width:52px;display:flex;align-items:center;flex-shrink:0}
 .rank-tag{font-size:10px;color:var(--color-text-tertiary)}
 .vs-pair{display:flex;flex-direction:column;align-items:flex-end;gap:1px}
-.vs-v{font-size:10px;color:var(--color-text-tertiary)}
-.vs-s-gpt{font-size:12px;font-weight:500;color:#185FA5}
-.vs-s-gem{font-size:12px;font-weight:500;color:#BA7517}
-.vs-s-cla{font-size:12px;font-weight:500;color:#0F6E56}
+.vs-vis{font-size:10px;color:var(--color-text-tertiary)}
+.vs-surv{font-size:12px;font-weight:600}
+.vs-surv-gpt{color:#185FA5}
+.vs-surv-gem{color:#9A6200}
+.vs-surv-cla{color:#0F6E56}
 
-/* WHY DIFFERENT */
+/* Why different — survival pattern cards */
 .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+@media(max-width:700px){.why-grid{grid-template-columns:1fr}}
 .why-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
 .why-header{padding:.75rem 1rem}
 .why-header-gpt{background:#E6F1FB}
-.why-header-gem{background:#FAEEDA}
+.why-header-gem{background:#FFF3DC}
 .why-header-cla{background:#E1F5EE}
-.why-header .wh-name{font-size:15px;font-weight:500}
+.why-header .wh-name{font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px}
 .why-header-gpt .wh-name{color:#0C447C}
 .why-header-gem .wh-name{color:#633806}
 .why-header-cla .wh-name{color:#085041}
-.why-header .wh-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
-.why-body{padding:.75rem 1rem}
-.driver-list{list-style:none;margin-bottom:.75rem}
-.driver-list li{display:flex;align-items:flex-start;gap:6px;font-size:12px;color:var(--color-text-primary);padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.why-header .wh-sub{font-size:10.5px;color:var(--color-text-secondary);margin-top:3px}
+.why-body{padding:.85rem 1rem}
+.top-survival-bar{display:flex;align-items:center;gap:8px;padding:.5rem .75rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:.85rem}
+.ts-crown{font-size:15px;color:#BA7517}
+.ts-logo-wrap{height:16px;width:50px;display:flex;align-items:center}
+.ts-val{font-size:11px;font-weight:600;color:var(--color-text-primary);margin-left:auto}
+.driver-section-label{font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--color-text-tertiary);text-transform:uppercase;margin-bottom:.5rem}
+.driver-list{list-style:none;margin-bottom:.85rem}
+.driver-list li{display:flex;align-items:flex-start;gap:6px;font-size:11.5px;color:var(--color-text-primary);padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
 .driver-list li:last-child{border-bottom:none}
-.driver-icon{font-size:14px;margin-top:1px}
-.top-brand-bar{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:6px 10px;margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between}
-.tb-label{font-size:11px;color:var(--color-text-tertiary)}
-.tb-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
-.insight-box{padding:8px 10px;border-radius:var(--border-radius-md);font-size:11px;line-height:1.5}
+.driver-icon{font-size:13px;margin-top:1px;flex-shrink:0}
+.surv-bar-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.sbl{display:flex;align-items:center;gap:5px;width:70px;flex-shrink:0}
+.sbl-logo{height:13px;width:auto;max-width:50px;object-fit:contain;object-position:left}
+.sb-track{flex:1;height:8px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+.sb-fill{height:100%;border-radius:4px}
+.sb-gpt{background:#378ADD}
+.sb-gem{background:#EF9F27}
+.sb-cla{background:#1D9E75}
+.sb-val{font-size:11px;font-weight:600;width:36px;text-align:right;flex-shrink:0}
+.sbv-gpt{color:#185FA5}
+.sbv-gem{color:#9A6200}
+.sbv-cla{color:#0F6E56}
+.insight-box{padding:8px 10px;border-radius:var(--border-radius-md);font-size:11px;line-height:1.5;margin-top:.75rem}
 .insight-gpt{background:#E6F1FB;color:#0C447C}
-.insight-gem{background:#FAEEDA;color:#633806}
+.insight-gem{background:#FFF3DC;color:#633806}
 .insight-cla{background:#E1F5EE;color:#085041}
-.bar-chart-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
-.bar-label{font-size:11px;color:var(--color-text-secondary);width:52px;text-align:right;flex-shrink:0}
-.bar-track{flex:1;height:8px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
-.bar-fill{height:100%;border-radius:4px}
-.bar-fill-gpt{background:#378ADD}
-.bar-fill-gem{background:#EF9F27}
-.bar-fill-cla{background:#1D9E75}
-.bar-val{font-size:11px;font-weight:500;width:28px;flex-shrink:0}
-.bar-val-gpt{color:#185FA5}
-.bar-val-gem{color:#BA7517}
-.bar-val-cla{color:#0F6E56}
 
-/* CONCLUSION */
-.conclusion-hero{text-align:center;padding:2rem 1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem}
-.conclusion-hero .sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:.5rem}
-.conclusion-hero .main{font-size:22px;font-weight:500;color:var(--color-text-primary);margin-bottom:.5rem;line-height:1.3}
-.conclusion-hero .highlight{font-size:18px;font-weight:500;color:#BA7517;background:#FAEEDA;padding:.3rem 1.2rem;border-radius:var(--border-radius-lg);display:inline-block;margin-top:.25rem}
+/* AI identity summary row */
+.ai-id-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:1.5rem}
+.ai-id-card{padding:.85rem 1rem;border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.ai-id-card .aic-ai{font-size:13px;font-weight:600;margin-bottom:.25rem;display:flex;align-items:center;gap:6px}
+.ai-id-card .aic-logic{font-size:11.5px;font-weight:500;margin-bottom:.5rem}
+.ai-id-card .aic-tags{display:flex;flex-wrap:wrap;gap:4px}
+
+/* ─── PAGE 3: METHODOLOGY ─── */
+.method-top-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+@media(max-width:600px){.method-top-grid{grid-template-columns:1fr}}
+.method-card{padding:1rem 1.25rem;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg)}
+.method-card h3{font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:.75rem;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.06em}
+.persona-list{list-style:none}
+.persona-list li{font-size:12px;color:var(--color-text-primary);padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px}
+.persona-list li:last-child{border-bottom:none}
+.persona-list li i{font-size:14px;color:var(--color-text-tertiary);flex-shrink:0}
+.flow-chain{display:flex;flex-direction:column;gap:4px}
+.flow-step{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--border-radius-md);font-size:12px;font-weight:500}
+.fs1{background:#E6F1FB;color:#0C447C}.fs2{background:#c5def6;color:#0C447C}
+.fs3{background:#FFF3DC;color:#633806}.fs4{background:#E1F5EE;color:#085041}
+.fs5{background:#EAF3DE;color:#27500A}
+.flow-arrow{text-align:center;color:var(--color-text-tertiary);font-size:12px;line-height:1.2}
+.domain-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.domain-item{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--color-text-primary);padding:4px 6px;border-radius:4px;background:var(--color-background-secondary)}
+.domain-item i{font-size:13px;color:var(--color-text-tertiary);flex-shrink:0}
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1.5rem}
+@media(max-width:600px){.metrics-row{grid-template-columns:repeat(2,1fr)}}
+.metric-card{padding:.75rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);text-align:center}
+.metric-card i{font-size:18px;color:var(--color-text-tertiary);margin-bottom:.3rem}
+.metric-card .mc-label{font-size:11px;color:var(--color-text-secondary);line-height:1.4}
+
+/* ─── PAGE 4: CONCLUSION ─── */
+.conclusion-hero{text-align:center;padding:2rem 1.5rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem}
+.conclusion-hero .ch-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:.5rem}
+.conclusion-hero .ch-main{font-size:11px;color:var(--color-text-secondary);margin-bottom:.3rem}
+.conclusion-hero .ch-title{font-size:22px;font-weight:700;color:var(--color-text-primary);margin-bottom:1rem}
 .pillars-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem}
+@media(max-width:600px){.pillars-grid{grid-template-columns:repeat(2,1fr)}}
 .pillar{padding:.9rem 1rem;border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);text-align:center;background:var(--color-background-primary)}
-.pillar i{font-size:22px;margin-bottom:.4rem}
+.pillar i{font-size:22px;margin-bottom:.4rem;display:block}
 .pillar .p-label{font-size:12px;font-weight:500;color:var(--color-text-primary);line-height:1.4}
-.final-stmt{display:flex;align-items:flex-start;gap:12px;padding:1rem 1.25rem;border-radius:var(--border-radius-lg);background:var(--color-background-secondary);border-left:3px solid #EF9F27;margin-bottom:1.5rem}
-.final-stmt i{font-size:20px;color:#BA7517;flex-shrink:0;margin-top:2px}
-.final-stmt p{font-size:13px;color:var(--color-text-primary);line-height:1.6}
-.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
-.sum-card{padding:.9rem 1rem;border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
-.sum-card .sc-ai{font-size:13px;font-weight:500;margin-bottom:.3rem;display:flex;align-items:center;gap:6px}
-.sum-card .sc-logic{font-size:12px;font-weight:500;margin-bottom:.4rem}
-.sum-card .sc-tags{display:flex;flex-wrap:wrap;gap:4px}
-</style>
 
-<h2 class="sr-only">GEO Analysis & Strategy for Semiconductor Brands — Interactive Report</h2>
+/* GEO priorities */
+.priority-list{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem}
+.priority-item{display:flex;gap:12px;padding:1rem 1.1rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);background:var(--color-background-primary)}
+.priority-num{font-size:18px;font-weight:700;color:var(--color-text-tertiary);flex-shrink:0;width:24px}
+.priority-content h4{font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:.3rem}
+.priority-content p{font-size:11.5px;color:var(--color-text-secondary);line-height:1.6}
+.priority-why{font-size:11px;font-style:italic;color:var(--color-text-tertiary);margin-top:.3rem;padding-top:.3rem;border-top:0.5px solid var(--color-border-tertiary)}
+
+/* Marketing recs */
+.mkt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.5rem}
+@media(max-width:600px){.mkt-grid{grid-template-columns:1fr}}
+.mkt-section{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.mkt-header{padding:.6rem 1rem;display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.mkt-body{padding:.85rem 1rem}
+.mkt-item{margin-bottom:.75rem;padding-bottom:.75rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.mkt-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.mkt-item h5{font-size:12px;font-weight:600;color:var(--color-text-primary);margin-bottom:.3rem;display:flex;align-items:center;gap:5px}
+.mkt-item ul{padding-left:1.1rem;font-size:11px;color:var(--color-text-secondary);line-height:1.8}
+.mkt-why{font-size:10.5px;font-style:italic;color:var(--color-text-tertiary);margin-top:.25rem}
+
+div.sep{height:0.5px;background:var(--color-border-tertiary);margin:1.5rem 0}
+</style>
+</head>
+<body>
 
 <nav>
-  <button class="nav-btn active" onclick="showPage(0,this)"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Overview</button>
-  <button class="nav-btn" onclick="showPage(1,this)"><i class="ti ti-table" aria-hidden="true"></i> GEO Matrix</button>
-  <button class="nav-btn" onclick="showPage(2,this)"><i class="ti ti-chart-bar" aria-hidden="true"></i> Rankings</button>
-  <button class="nav-btn" onclick="showPage(3,this)"><i class="ti ti-brain" aria-hidden="true"></i> Why Different</button>
-  <button class="nav-btn" onclick="showPage(4,this)"><i class="ti ti-flag" aria-hidden="true"></i> Conclusion</button>
+  <button class="nav-btn active" onclick="showPage(0,this)"><i class="ti ti-layout-dashboard"></i> Overview</button>
+  <button class="nav-btn" onclick="showPage(1,this)"><i class="ti ti-table"></i> GEO Matrix</button>
+  <button class="nav-btn" onclick="showPage(2,this)"><i class="ti ti-chart-bar"></i> Rankings</button>
+  <button class="nav-btn" onclick="showPage(3,this)"><i class="ti ti-settings"></i> Methodology</button>
+  <button class="nav-btn" onclick="showPage(4,this)"><i class="ti ti-flag"></i> Conclusion</button>
 </nav>
 
-<!-- PAGE 0: COVER -->
+<!-- ══════════════════════════════════════════
+     PAGE 0: OVERVIEW
+══════════════════════════════════════════ -->
 <div class="page" id="page-0">
-  <div class="page-label"><i class="ti ti-cpu" aria-hidden="true"></i> GEO Intelligence Report</div>
-  <div class="cover-hero">
-    <div class="cover-title">
-      <h1>GEO Analysis & Strategy for Semiconductor Brands</h1>
-      <p>Focus on Industrial &amp; Power Sector — AI Engineering Reasoning Governance Analysis</p>
-    </div>
+  <div class="page-label"><i class="ti ti-cpu"></i> GEO Intelligence Report</div>
 
-    <div class="ai-card">
-      <div class="ai-icon"><i class="ti ti-robot" style="color:#185FA5" aria-hidden="true"></i></div>
-      <div class="ai-name">GPT</div>
-      <div class="ai-logic">Workflow Continuity-driven</div>
-      <span class="tag tag-blue"><i class="ti ti-arrows-right" aria-hidden="true"></i> SDK Ecosystem</span>
-      <span class="tag tag-blue"><i class="ti ti-repeat" aria-hidden="true"></i> Reusable Workflow</span>
-      <span class="tag tag-blue"><i class="ti ti-link" aria-hidden="true"></i> Cross-domain</span>
-    </div>
-
-    <div class="ai-card">
-      <div class="ai-icon"><i class="ti ti-robot" style="color:#BA7517" aria-hidden="true"></i></div>
-      <div class="ai-name">Gemini</div>
-      <div class="ai-logic">Architecture Authority-driven</div>
-      <span class="tag tag-amber"><i class="ti ti-blueprint" aria-hidden="true"></i> Topology Integrity</span>
-      <span class="tag tag-amber"><i class="ti ti-certificate" aria-hidden="true"></i> Validation Auth.</span>
-      <span class="tag tag-amber"><i class="ti ti-hierarchy" aria-hidden="true"></i> Structured Docs</span>
-    </div>
-
-    <div class="ai-card">
-      <div class="ai-icon"><i class="ti ti-robot" style="color:#0F6E56" aria-hidden="true"></i></div>
-      <div class="ai-name">Claude</div>
-      <div class="ai-logic">Implementation Continuity-driven</div>
-      <span class="tag tag-teal"><i class="ti ti-package" aria-hidden="true"></i> BOM Continuity</span>
-      <span class="tag tag-teal"><i class="ti ti-device-floppy" aria-hidden="true"></i> Deployable Arch.</span>
-      <span class="tag tag-teal"><i class="ti ti-checklist" aria-hidden="true"></i> Execution Persist.</span>
-    </div>
-
-    <div class="core-principle">
-      <i class="ti ti-alert-triangle" aria-hidden="true"></i>
-      <div>
-        <strong>Visibility ≠ Survival</strong>
-        <br><span>AI rewards engineering workflow continuity — not isolated component visibility or keyword ranking.</span>
-      </div>
+  <!-- Header -->
+  <div class="cover-header">
+    <h1>GEO Analysis &amp; Strategy for Semiconductor Brands</h1>
+    <p>Focus on Industrial &amp; Power Sector — AI Engineering Reasoning Governance Analysis</p>
+    <div class="ai-tools-row">
+      <span class="ai-tools-label">Analyzed using</span>
+      <span class="ai-tool-badge gpt">
+        <svg width="16" height="16" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M37.532 16.87a9.963 9.963 0 00-.856-8.184 10.078 10.078 0 00-10.855-4.835 9.964 9.964 0 00-7.505-3.357 10.078 10.078 0 00-9.609 6.977 9.967 9.967 0 00-6.664 4.834 10.08 10.08 0 001.24 11.817 9.965 9.965 0 00.856 8.185 10.079 10.079 0 0010.855 4.835 9.965 9.965 0 007.504 3.357 10.078 10.078 0 009.609-6.976 9.967 9.967 0 006.664-4.834 10.079 10.079 0 00-1.239-11.818zm-14.565 20.343a7.477 7.477 0 01-4.806-1.73c.061-.033.168-.091.237-.134l7.964-4.6a1.294 1.294 0 00.655-1.134V19.054l3.366 1.944a.12.12 0 01.066.092v9.299a7.505 7.505 0 01-7.482 7.824zM6.392 33.64a7.469 7.469 0 01-.894-5.023c.06.036.162.099.237.141l7.964 4.6a1.297 1.297 0 001.308 0l9.724-5.614v3.888a.12.12 0 01-.048.103L16.4 36.87a7.505 7.505 0 01-10.008-3.23zm-2.63-17.963A7.47 7.47 0 017.655 11.72c0 .068-.004.19-.004.274v9.201a1.294 1.294 0 00.654 1.132l9.723 5.614-3.366 1.944a.12.12 0 01-.114.012L5.8 24.855a7.505 7.505 0 01-2.038-9.178zm27.658 6.437l-9.724-5.615 3.367-1.943a.121.121 0 01.114-.012l8.048 4.648a7.498 7.498 0 01-1.158 13.528v-9.476a1.293 1.293 0 00-.647-1.13zm3.35-5.043c-.059-.037-.162-.099-.236-.141l-7.965-4.6a1.298 1.298 0 00-1.308 0l-9.723 5.614v-3.888a.12.12 0 01.048-.103l8.278-4.776a7.5 7.5 0 0110.906 7.894zm-21.063 6.929l-3.367-1.944a.12.12 0 01-.065-.092v-9.299a7.501 7.501 0 0112.293-5.756 6.94 6.94 0 00-.236.134l-7.965 4.6a1.294 1.294 0 00-.654 1.132l-.006 11.225zm1.829-3.943l4.33-2.501 4.332 2.5v4.999l-4.331 2.5-4.331-2.5V19.057z" fill="currentColor"/></svg>
+        GPT
+      </span>
+      <span class="ai-tool-badge gem">
+        <svg width="16" height="16" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path d="M96 8.571C48.082 8.571 8.571 48.082 8.571 96S48.082 183.429 96 183.429 183.429 143.918 183.429 96 143.918 8.571 96 8.571zm0 22.858c17.485 0 33.542 6.29 45.927 16.654L42.083 148.369A73.37 73.37 0 0122.857 96c0-40.29 32.853-64.571 73.143-64.571zm0 137.143c-17.485 0-33.542-6.29-45.927-16.654l99.844-100.286A73.37 73.37 0 01169.143 96c0 40.29-32.853 64.572-73.143 64.572z" fill="currentColor"/></svg>
+        Gemini
+      </span>
+      <span class="ai-tool-badge cla">
+        <svg width="16" height="16" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm6.5 8.5c.552 0 1 .448 1 1s-.448 1-1 1-1-.448-1-1 .448-1 1-1zM9.5 10.5c.552 0 1 .448 1 1s-.448 1-1 1-1-.448-1-1 .448-1 1-1zM16 24c-3.86 0-7.17-2.196-8.83-5.4a.5.5 0 01.437-.742c.163 0 .318.08.412.22C9.393 20.86 12.46 23 16 23s6.607-2.14 7.981-4.922a.5.5 0 01.45-.278.5.5 0 01.437.742C23.17 21.804 19.86 24 16 24z" fill="currentColor"/></svg>
+        Claude
+      </span>
     </div>
   </div>
 
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem">
-    <div style="padding:.9rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary)">
-      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:.3rem">Engineering Domains</div>
-      <div style="font-size:22px;font-weight:500;color:var(--color-text-primary)">10</div>
+  <!-- Integrated Ranking -->
+  <div class="section-title">Cross-AI Integrated Visibility &amp; Survival Ranking</div>
+  <div class="section-subtitle">
+    Systematically tracked through engineering query flow<br>
+    <span style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:4px">
+      <span class="flow-node">Architecture</span><span style="color:var(--color-text-tertiary);font-size:11px">→</span>
+      <span class="flow-node">Validation</span><span style="color:var(--color-text-tertiary);font-size:11px">→</span>
+      <span class="flow-node">Implementation</span>
+    </span>
+  </div>
+
+  <div class="int-rank-list" id="int-rank-list"></div>
+
+  <!-- Final Cross-AI Integrated Survival Share -->
+  <div class="final-share-box">
+    <h3><i class="ti ti-chart-donut" style="margin-right:6px;color:var(--color-text-tertiary)"></i>Final Cross-AI Integrated Survival Share</h3>
+    <div class="share-grid" id="share-grid"></div>
+  </div>
+
+  <div class="core-banner">
+    <i class="ti ti-alert-triangle"></i>
+    <div>
+      <strong>Visibility ≠ Survival</strong>
+      <span>AI rewards engineering workflow continuity — Some brands dominated early visibility, but disappeared during validation and implementation workflows.</span>
     </div>
-    <div style="padding:.9rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary)">
-      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:.3rem">AI Engines Compared</div>
-      <div style="font-size:22px;font-weight:500;color:var(--color-text-primary)">3</div>
-    </div>
-    <div style="padding:.9rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary)">
-      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:.3rem">Brands Tracked</div>
-      <div style="font-size:22px;font-weight:500;color:var(--color-text-primary)">6+</div>
-    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-num">750</div><div class="stat-label"><i class="ti ti-cpu" style="font-size:11px"></i> Engineering reasoning outputs</div></div>
+    <div class="stat-card"><div class="stat-num">5</div><div class="stat-label"><i class="ti ti-users" style="font-size:11px"></i> Engineering personas</div></div>
+    <div class="stat-card"><div class="stat-num">10</div><div class="stat-label"><i class="ti ti-circuit-board" style="font-size:11px"></i> Engineering domains (industrial &amp; power)</div></div>
+    <div class="stat-card"><div class="stat-num">4</div><div class="stat-label"><i class="ti ti-git-branch" style="font-size:11px"></i> Multi-turn technical query workflows</div></div>
+  </div>
+
+  <div class="page-footer-insight">
+    <i class="ti ti-bulb"></i>
+    <p><strong>Overview insight:</strong> Integrated cross-AI survival rankings reveal that brands maintaining continuity across all three engines — GPT, Gemini, and Claude — are those with workflow-connected content ecosystems. High visibility does not predict survival; architecture and implementation persistence do.</p>
   </div>
 </div>
 
-<!-- PAGE 1: GEO MATRIX -->
+<!-- ══════════════════════════════════════════
+     PAGE 1: GEO MATRIX
+══════════════════════════════════════════ -->
 <div class="page" id="page-1" style="display:none">
-  <div class="page-label">Page 01</div>
-  <div class="page-title">Cross-AI Engineering Workflow GEO Matrix</div>
-
-  <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;font-size:12px;color:var(--color-text-secondary);align-items:center">
-    <span><span class="diff-dot dot-same"></span>Consistent across AIs</span>
-    <span><span class="diff-dot dot-diff"></span>Engine divergence</span>
-    <span style="color:var(--color-text-tertiary)">V = Visibility  ·  <strong style="color:var(--color-text-primary)">S = Survival</strong></span>
-  </div>
+  <div class="page-label"><i class="ti ti-table"></i> Page 01</div>
+  <div class="section-title">Cross-AI Engineering Workflow GEO Matrix</div>
 
   <div class="matrix-wrap">
-    <table class="matrix" aria-label="Cross-AI GEO Matrix with visibility and survival metrics">
+    <table class="matrix" aria-label="Cross-AI GEO Matrix">
       <thead>
         <tr>
-          <th style="width:150px">Domain</th>
-          <th style="width:130px">Technologies</th>
-          <th style="width:110px">Key Components</th>
-          <th class="gpt-h" style="width:100px"><i class="ti ti-robot" aria-hidden="true"></i> GPT <br><span style="font-weight:400;font-size:10px">V / S</span></th>
-          <th class="gem-h" style="width:100px"><i class="ti ti-robot" aria-hidden="true"></i> Gemini <br><span style="font-weight:400;font-size:10px">V / S</span></th>
-          <th class="cla-h" style="width:100px"><i class="ti ti-robot" aria-hidden="true"></i> Claude <br><span style="font-weight:400;font-size:10px">V / S</span></th>
-          <th style="width:60px">Signal</th>
+          <th style="width:140px">Engineering Domain</th>
+          <th style="width:140px">Related Technologies / Query Intent</th>
+          <th style="width:130px">Key Components / Solutions</th>
+          <th class="gpt-h" style="width:110px"><i class="ti ti-robot"></i> GPT</th>
+          <th class="gem-h" style="width:110px"><i class="ti ti-robot"></i> Gemini</th>
+          <th class="cla-h" style="width:110px"><i class="ti ti-robot"></i> Claude</th>
+          <th style="width:50px">Signal</th>
         </tr>
       </thead>
       <tbody id="matrix-body"></tbody>
     </table>
   </div>
 
-  <div style="margin-top:1rem;padding:.9rem 1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border-left:3px solid #BA7517;font-size:12px;color:var(--color-text-secondary)">
-    <strong style="color:var(--color-text-primary)">Key GEO insight:</strong> Across all AI engines, semiconductor survival increasingly depends on engineering workflow continuity, architecture persistence, and implementation survivability — not isolated component visibility.
+  <div class="matrix-caption">
+    <div class="cap-row"><span class="sig-dot dot-same" style="width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0"></span><span><strong>Consistent across AIs</strong> — All three engines converge on the same lead brand for this domain. Indicates strong workflow-level brand lock-in and high architecture persistence.</span></div>
+    <div class="cap-row" style="margin-top:4px"><span class="sig-dot dot-diff" style="width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0"></span><span><strong>Engine divergence</strong> — AI engines prioritize different brands. Indicates reasoning-stage split: GPT may favor SDK continuity while Gemini rewards architecture authority and Claude rewards deployable implementation paths.</span></div>
+  </div>
+
+  <div class="sep"></div>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem;line-height:1.7">Semiconductor survival increasingly depends on <strong style="color:var(--color-text-primary)">engineering workflow continuity</strong>, <strong style="color:var(--color-text-primary)">architecture persistence</strong>, and <strong style="color:var(--color-text-primary)">implementation survivability</strong> — not isolated component visibility.</p>
+
+  <!-- Per-AI workflow result blocks -->
+  <div class="ai-geo-grid" id="ai-geo-grid"></div>
+
+  <div class="page-footer-insight" style="margin-top:1.25rem">
+    <i class="ti ti-topology-star-ring"></i>
+    <p><strong>GEO Matrix insight:</strong> Engine divergence is highest in AI Infrastructure Power and Industrial Edge AI Inference — domains where GPT and Gemini reward established players while Claude uniquely surfaces specialist vendors (Vicor, NXP) with deployment-ready ecosystems.</p>
   </div>
 </div>
 
-<!-- PAGE 2: RANKINGS & METHODOLOGY -->
+<!-- ══════════════════════════════════════════
+     PAGE 2: RANKINGS
+══════════════════════════════════════════ -->
 <div class="page" id="page-2" style="display:none">
-  <div class="page-label">Page 02</div>
-  <div class="page-title">AI-specific Brand Visibility & GEO Methodology</div>
+  <div class="page-label"><i class="ti ti-chart-bar"></i> Page 02</div>
+  <div class="section-title">AI-specific Brand Visibility &amp; Survival Ranking</div>
 
-  <div class="method-grid" style="margin-bottom:1.5rem">
-    <div class="method-card">
-      <h3><i class="ti ti-users" aria-hidden="true"></i> Persona framework</h3>
-      <ul class="persona-list">
-        <li><i class="ti ti-tool" style="font-size:14px;color:var(--color-text-tertiary)" aria-hidden="true"></i> Design Engineer</li>
-        <li><i class="ti ti-briefcase" style="font-size:14px;color:var(--color-text-tertiary)" aria-hidden="true"></i> Technical Manager</li>
-        <li><i class="ti ti-sitemap" style="font-size:14px;color:var(--color-text-tertiary)" aria-hidden="true"></i> System Architect</li>
-        <li><i class="ti ti-handshake" style="font-size:14px;color:var(--color-text-tertiary)" aria-hidden="true"></i> SI Partner</li>
-        <li><i class="ti ti-crown" style="font-size:14px;color:var(--color-text-tertiary)" aria-hidden="true"></i> Executive / CTO</li>
-      </ul>
-    </div>
-    <div class="method-card">
-      <h3><i class="ti ti-route" aria-hidden="true"></i> Engineering query flow</h3>
-      <div class="flow-chain">
-        <div class="flow-step fs1"><i class="ti ti-clipboard-list" aria-hidden="true"></i> Technical requirements</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-step fs2"><i class="ti ti-topology-star" aria-hidden="true"></i> Topology selection</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-step fs3"><i class="ti ti-puzzle" aria-hidden="true"></i> Component mapping</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-step fs4"><i class="ti ti-check-circle" aria-hidden="true"></i> Validation continuity</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-step fs5"><i class="ti ti-package" aria-hidden="true"></i> Final implementation</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-title" style="font-size:16px;margin-bottom:1rem">AI-specific brand visibility ranking</div>
+  <div class="rank-section-title">Per-engine brand ranking — Visibility &amp; Survival</div>
   <div class="ai-rank-grid" id="rank-grid"></div>
 
-  <div style="padding:.9rem 1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);font-size:12px;color:var(--color-text-secondary)">
-    <strong style="color:var(--color-text-primary)">Visibility ≠ Survival</strong> — Survival scores reflect persistence across multi-turn engineering workflow chains. A brand may have high visibility in initial responses but low survival as reasoning deepens into implementation and validation stages.
-  </div>
-</div>
-
-<!-- PAGE 3: WHY DIFFERENT -->
-<div class="page" id="page-3" style="display:none">
-  <div class="page-label">Page 03</div>
-  <div class="page-title">Why different AI engines produce different GEO results</div>
-
+  <div class="sep"></div>
+  <div class="rank-section-title">Why different AI engines produce different GEO results</div>
   <div class="why-grid" id="why-grid"></div>
 
-  <div style="padding:.9rem 1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);margin-bottom:1rem">
-    <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:.75rem">AI reasoning identity summary</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem">
-      <div style="text-align:center;padding:.5rem;background:#E6F1FB;border-radius:var(--border-radius-md)">
-        <div style="font-size:13px;font-weight:500;color:#0C447C">GPT</div>
-        <div style="font-size:11px;color:#185FA5">Workflow Survivability</div>
+  <!-- AI identity cards moved from overview -->
+  <div class="rank-section-title" style="margin-top:0">AI reasoning identity</div>
+  <div class="ai-id-row">
+    <div class="ai-id-card">
+      <div class="aic-ai" style="color:#0C447C"><i class="ti ti-robot" style="font-size:15px"></i> GPT</div>
+      <div class="aic-logic" style="color:#185FA5">Workflow Continuity-driven</div>
+      <div class="aic-tags">
+        <span class="tag tag-blue"><i class="ti ti-code"></i> SDK Ecosystem</span>
+        <span class="tag tag-blue"><i class="ti ti-repeat"></i> Reusable Workflow</span>
+        <span class="tag tag-blue"><i class="ti ti-link"></i> Cross-domain</span>
       </div>
-      <div style="text-align:center;padding:.5rem;background:#FAEEDA;border-radius:var(--border-radius-md)">
-        <div style="font-size:13px;font-weight:500;color:#633806">Gemini</div>
-        <div style="font-size:11px;color:#854F0B">Architecture Authority</div>
+    </div>
+    <div class="ai-id-card">
+      <div class="aic-ai" style="color:#633806"><i class="ti ti-robot" style="font-size:15px"></i> Gemini</div>
+      <div class="aic-logic" style="color:#9A6200">Architecture Authority-driven</div>
+      <div class="aic-tags">
+        <span class="tag tag-amber"><i class="ti ti-blueprint"></i> Topology Integrity</span>
+        <span class="tag tag-amber"><i class="ti ti-certificate"></i> Validation Auth.</span>
+        <span class="tag tag-amber"><i class="ti ti-hierarchy"></i> Structured Docs</span>
       </div>
-      <div style="text-align:center;padding:.5rem;background:#E1F5EE;border-radius:var(--border-radius-md)">
-        <div style="font-size:13px;font-weight:500;color:#085041">Claude</div>
-        <div style="font-size:11px;color:#0F6E56">Implementation Continuity</div>
+    </div>
+    <div class="ai-id-card">
+      <div class="aic-ai" style="color:#085041"><i class="ti ti-robot" style="font-size:15px"></i> Claude</div>
+      <div class="aic-logic" style="color:#0F6E56">Implementation Continuity-driven</div>
+      <div class="aic-tags">
+        <span class="tag tag-teal"><i class="ti ti-package"></i> BOM Continuity</span>
+        <span class="tag tag-teal"><i class="ti ti-device-floppy"></i> Deployable Arch.</span>
+        <span class="tag tag-teal"><i class="ti ti-checklist"></i> Execution Persist.</span>
       </div>
     </div>
   </div>
+
+  <div class="page-footer-insight">
+    <i class="ti ti-arrows-diff"></i>
+    <p><strong>Rankings insight:</strong> Each AI engine applies a distinct survival filter. GPT's SDK-weighted reasoning elevates ADI and TI; Gemini's architecture bias rewards Infineon's topology depth; Claude's implementation realism uniquely surfaces Vicor in AI power domains where BOM continuity is critical.</p>
+  </div>
 </div>
 
-<!-- PAGE 4: CONCLUSION -->
+<!-- ══════════════════════════════════════════
+     PAGE 3: METHODOLOGY
+══════════════════════════════════════════ -->
+<div class="page" id="page-3" style="display:none">
+  <div class="page-label"><i class="ti ti-settings"></i> Page 03</div>
+  <div class="section-title">Methodology</div>
+
+  <!-- GEO metrics summary -->
+  <div class="metrics-row">
+    <div class="metric-card"><i class="ti ti-eye"></i><div class="mc-label">Visibility<br>Score</div></div>
+    <div class="metric-card"><i class="ti ti-shield-check"></i><div class="mc-label">Survival<br>Score</div></div>
+    <div class="metric-card"><i class="ti ti-route"></i><div class="mc-label">Cross-domain<br>Persistence</div></div>
+    <div class="metric-card"><i class="ti ti-crown"></i><div class="mc-label">Workflow<br>Ownership</div></div>
+  </div>
+
+  <div class="method-top-grid">
+    <!-- Persona framework -->
+    <div class="method-card">
+      <h3><i class="ti ti-users"></i> Persona framework</h3>
+      <ul class="persona-list">
+        <li><i class="ti ti-tool"></i> Design Engineer</li>
+        <li><i class="ti ti-briefcase"></i> Technical Manager</li>
+        <li><i class="ti ti-sitemap"></i> System Architect</li>
+        <li><i class="ti ti-handshake"></i> SI Partner</li>
+        <li><i class="ti ti-crown"></i> Executive / CTO</li>
+      </ul>
+    </div>
+    <!-- Engineering query flow -->
+    <div class="method-card">
+      <h3><i class="ti ti-route"></i> Multi-turn engineering query flow</h3>
+      <div class="flow-chain">
+        <div class="flow-step fs1"><i class="ti ti-clipboard-list"></i> Technical Requirements</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step fs2"><i class="ti ti-topology-star"></i> Topology Selection</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step fs3"><i class="ti ti-puzzle"></i> Component Mapping</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step fs4"><i class="ti ti-check-circle"></i> Validation Continuity</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step fs5"><i class="ti ti-package"></i> Final Implementation</div>
+      </div>
+    </div>
+    <!-- Engineering domains -->
+    <div class="method-card">
+      <h3><i class="ti ti-circuit-board"></i> Engineering domains (10)</h3>
+      <div class="domain-grid">
+        <div class="domain-item"><i class="ti ti-bolt"></i> Real-time Motor Control</div>
+        <div class="domain-item"><i class="ti ti-engine"></i> Industrial Motor Drive / Servo</div>
+        <div class="domain-item"><i class="ti ti-plug"></i> Power Conversion &amp; Inverter</div>
+        <div class="domain-item"><i class="ti ti-wave-sine"></i> Precision Feedback &amp; Monitoring</div>
+        <div class="domain-item"><i class="ti ti-shield"></i> Protection &amp; Isolation</div>
+        <div class="domain-item"><i class="ti ti-network"></i> Industrial Connectivity</div>
+        <div class="domain-item"><i class="ti ti-building-factory"></i> PLC / Factory Automation</div>
+        <div class="domain-item"><i class="ti ti-activity"></i> Predictive Maintenance</div>
+        <div class="domain-item"><i class="ti ti-brain"></i> Industrial Edge AI Inference</div>
+        <div class="domain-item"><i class="ti ti-server"></i> AI Infrastructure Power</div>
+      </div>
+    </div>
+    <!-- Comparative metrics -->
+    <div class="method-card">
+      <h3><i class="ti ti-chart-bar"></i> Comparative GEO metrics</h3>
+      <ul class="persona-list">
+        <li><i class="ti ti-eye"></i> Visibility — initial mention rate across query flows</li>
+        <li><i class="ti ti-shield-check"></i> Survival — persistence through validation &amp; implementation</li>
+        <li><i class="ti ti-route"></i> Cross-domain Persistence — multi-domain continuity</li>
+        <li><i class="ti ti-crown"></i> Workflow Ownership — end-to-end reasoning dominance</li>
+        <li><i class="ti ti-users"></i> Persona Survival Bias — persona-specific persistence</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Brand GEO identity table -->
+  <div class="rank-section-title">Final brand GEO identity</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1.5rem" id="brand-identity-grid"></div>
+
+  <div class="page-footer-insight">
+    <i class="ti ti-microscope"></i>
+    <p><strong>Methodology insight:</strong> The 5-stage multi-turn query flow is the critical differentiator — brands that appear in early "Technical Requirements" queries often drop out by "Validation Continuity" and "Final Implementation" stages. Survival rates measure this drop-off, not just initial visibility.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 4: CONCLUSION
+══════════════════════════════════════════ -->
 <div class="page" id="page-4" style="display:none">
-  <div class="page-label">Final conclusion</div>
+  <div class="page-label"><i class="ti ti-flag"></i> Conclusion</div>
 
   <div class="conclusion-hero">
-    <div class="sub">The future of semiconductor GEO is shifting from keyword visibility toward</div>
-    <div class="main">Engineering Workflow Ownership</div>
-    <div class="highlight"><i class="ti ti-award" aria-hidden="true"></i> Survival = Workflow continuity + Architecture persistence</div>
+    <div class="ch-sub">AI is increasingly rewarding:</div>
+    <div class="ch-title">Engineering Workflow Ownership</div>
+    <p style="font-size:12px;color:var(--color-text-secondary);max-width:580px;margin:0 auto;line-height:1.7">The brands most likely to survive AI-driven engineering workflows will be those capable of maintaining <strong>architecture continuity</strong>, <strong>validation continuity</strong>, <strong>implementation continuity</strong>, and <strong>ecosystem-connected engineering intelligence</strong> across the full engineering reasoning chain.</p>
   </div>
 
   <div class="pillars-grid">
-    <div class="pillar">
-      <div><i class="ti ti-topology-star-ring" style="color:#185FA5;font-size:24px" aria-hidden="true"></i></div>
-      <div class="p-label" style="color:#185FA5">Architecture<br>continuity</div>
+    <div class="pillar"><i class="ti ti-topology-star-ring" style="color:#185FA5"></i><div class="p-label" style="color:#185FA5">Architecture<br>Continuity</div></div>
+    <div class="pillar"><i class="ti ti-check-circle" style="color:#BA7517"></i><div class="p-label" style="color:#BA7517">Validation<br>Continuity</div></div>
+    <div class="pillar"><i class="ti ti-package" style="color:#0F6E56"></i><div class="p-label" style="color:#0F6E56">Implementation<br>Continuity</div></div>
+    <div class="pillar"><i class="ti ti-link" style="color:#3C3489"></i><div class="p-label" style="color:#3C3489">Ecosystem-connected<br>Intelligence</div></div>
+  </div>
+
+  <!-- GEO Survival Priorities -->
+  <div class="rank-section-title">Most Effective GEO Survival Priorities</div>
+  <div class="priority-list">
+    <div class="priority-item">
+      <div class="priority-num" style="color:#185FA5">1</div>
+      <div class="priority-content">
+        <h4><i class="ti ti-topology-ring-3" style="color:#185FA5;margin-right:5px"></i>Build Engineering Workflow-connected Content Ecosystems</h4>
+        <p>Create technical content aligned to requirements → topology → validation → implementation, instead of isolated product pages.</p>
+        <div class="priority-why">Most effective because AI reasoning increasingly evaluates continuity across the entire engineering process rather than isolated component visibility.</div>
+      </div>
     </div>
-    <div class="pillar">
-      <div><i class="ti ti-package" style="color:#0F6E56;font-size:24px" aria-hidden="true"></i></div>
-      <div class="p-label" style="color:#0F6E56">Implementation<br>continuity</div>
+    <div class="priority-item">
+      <div class="priority-num" style="color:#9A6200">2</div>
+      <div class="priority-content">
+        <h4><i class="ti ti-certificate" style="color:#9A6200;margin-right:5px"></i>Strengthen Architecture + Validation Authority</h4>
+        <p>Expand simulation guides, EMI/thermal validation, interoperability documentation, and implementation examples.</p>
+        <div class="priority-why">Validation persistence consistently determined whether brands survived later-stage reasoning workflows.</div>
+      </div>
     </div>
-    <div class="pillar">
-      <div><i class="ti ti-check-circle" style="color:#BA7517;font-size:24px" aria-hidden="true"></i></div>
-      <div class="p-label" style="color:#BA7517">Validation<br>continuity</div>
-    </div>
-    <div class="pillar">
-      <div><i class="ti ti-link" style="color:#3C3489;font-size:24px" aria-hidden="true"></i></div>
-      <div class="p-label" style="color:#3C3489">Workflow-connected<br>intelligence</div>
+    <div class="priority-item">
+      <div class="priority-num" style="color:#0F6E56">3</div>
+      <div class="priority-content">
+        <h4><i class="ti ti-package" style="color:#0F6E56;margin-right:5px"></i>Expand Deployable Ecosystem Continuity</h4>
+        <p>Build partner-integrated solution workflows, ecosystem implementation examples, and deployment continuity stories.</p>
+        <div class="priority-why">Implementation continuity and partner-integrated workflows increasingly influenced final AI recommendation survival.</div>
+      </div>
     </div>
   </div>
 
-  <div class="final-stmt">
-    <i class="ti ti-bulb" aria-hidden="true"></i>
-    <p>AI no longer rewards isolated component visibility. AI increasingly rewards <strong>workflow-connected engineering intelligence</strong>, <strong>architecture continuity</strong>, <strong>implementation survivability</strong>, and <strong>validation persistence</strong> across full engineering decision workflows.</p>
+  <!-- Marketing Recommendations -->
+  <div class="rank-section-title">Marketing Recommendations to Improve GEO Survival</div>
+  <div class="mkt-grid">
+    <div class="mkt-section">
+      <div class="mkt-header"><i class="ti ti-writing" style="color:#185FA5"></i> A. Content Marketing</div>
+      <div class="mkt-body">
+        <div class="mkt-item">
+          <h5><i class="ti ti-file-text" style="color:#185FA5"></i> Workflow-connected Technical Content</h5>
+          <ul><li>Requirements → topology → validation → implementation</li><li>Instead of isolated product pages</li></ul>
+          <div class="mkt-why">AI reasoning systems favor continuity across engineering workflows over disconnected content fragments.</div>
+        </div>
+        <div class="mkt-item">
+          <h5><i class="ti ti-blueprint" style="color:#185FA5"></i> Cross-domain Reference Architecture Content</h5>
+          <ul><li>Reusable reference designs &amp; architecture guides</li><li>Workflow diagrams across adjacent industrial domains</li></ul>
+          <div class="mkt-why">GPT and Gemini especially favored reusable engineering continuity and architecture persistence across domains.</div>
+        </div>
+        <div class="mkt-item">
+          <h5><i class="ti ti-certificate" style="color:#185FA5"></i> Validation-focused Technical Assets</h5>
+          <ul><li>Simulation guides, EMI/thermal validation</li><li>Interoperability documentation, implementation examples</li></ul>
+          <div class="mkt-why">Gemini and Claude strongly rewarded validation authority and implementation realism during survival stages.</div>
+        </div>
+      </div>
+    </div>
+    <div class="mkt-section">
+      <div class="mkt-header"><i class="ti ti-world" style="color:#9A6200"></i> B. Digital Marketing</div>
+      <div class="mkt-body">
+        <div class="mkt-item">
+          <h5><i class="ti ti-route" style="color:#9A6200"></i> Engineer Search Journey Mapping</h5>
+          <ul><li>Multi-step engineering queries &amp; sequential technical reasoning</li><li>Implementation follow-up searches (not standalone keywords)</li></ul>
+          <div class="mkt-why">AI search increasingly follows reasoning continuity rather than isolated keyword matching.</div>
+        </div>
+        <div class="mkt-item">
+          <h5><i class="ti ti-code" style="color:#9A6200"></i> AI-readable Structured Documentation</h5>
+          <ul><li>Semantic structure, hierarchy consistency, technical metadata</li><li>Machine-readable formatting</li></ul>
+          <div class="mkt-why">Structured engineering documentation improves AI parsing, retrieval consistency, and reasoning continuity.</div>
+        </div>
+        <div class="mkt-item">
+          <h5><i class="ti ti-files" style="color:#9A6200"></i> Multi-format Technical Content Expansion</h5>
+          <ul><li>PDF technical guides, application notes, webinars</li><li>Engineering walkthroughs, simulation examples</li></ul>
+          <div class="mkt-why">AI engines increasingly synthesize information across multiple content types and technical sources.</div>
+        </div>
+      </div>
+    </div>
+    <div class="mkt-section">
+      <div class="mkt-header"><i class="ti ti-handshake" style="color:#0F6E56"></i> C. Partner Marketing</div>
+      <div class="mkt-body">
+        <div class="mkt-item">
+          <h5><i class="ti ti-git-merge" style="color:#0F6E56"></i> Joint Workflow-based Solutions</h5>
+          <ul><li>Partner-integrated solution workflows</li><li>Ecosystem implementation examples, deployment continuity stories</li></ul>
+          <div class="mkt-why">Claude especially rewarded implementation continuity across deployment ecosystems.</div>
+        </div>
+        <div class="mkt-item">
+          <h5><i class="ti ti-arrows-join" style="color:#0F6E56"></i> Cross-partner Technical Alignment</h5>
+          <ul><li>Messaging, architecture, and validation consistency across partners</li></ul>
+          <div class="mkt-why">Fragmented implementation narratives reduced workflow persistence during later-stage AI reasoning.</div>
+        </div>
+        <div class="mkt-item">
+          <h5><i class="ti ti-building" style="color:#0F6E56"></i> Co-created Reference Architectures</h5>
+          <ul><li>Partner reference systems, validated deployment flows</li><li>Interoperability showcases</li></ul>
+          <div class="mkt-why">AI engines favored validated ecosystem continuity over isolated vendor positioning.</div>
+        </div>
+      </div>
+    </div>
+    <div class="mkt-section">
+      <div class="mkt-header"><i class="ti ti-package" style="color:#3C3489"></i> D. Product Marketing</div>
+      <div class="mkt-body">
+        <div class="mkt-item">
+          <h5><i class="ti ti-git-branch" style="color:#3C3489"></i> Workflow-oriented Positioning</h5>
+          <ul><li>Position products inside engineering workflows &amp; system architectures</li><li>Not standalone feature messaging</li></ul>
+          <div class="mkt-why">Visibility alone frequently failed to survive into implementation stages.</div>
+        </div>
+        <div class="mkt-item">
+          <h5><i class="ti ti-topology-complex" style="color:#3C3489"></i> Architecture-level Messaging</h5>
+          <ul><li>Strengthen topology guidance, system-level positioning, integration logic</li></ul>
+          <div class="mkt-why">Gemini strongly prioritized architecture authority during reasoning workflows.</div>
+        </div>
+        <div class="mkt-item">
+          <h5><i class="ti ti-puzzle" style="color:#3C3489"></i> Technical Ecosystem Expansion</h5>
+          <ul><li>SDK ecosystem, reference software, partner toolchains</li><li>Simulation compatibility</li></ul>
+          <div class="mkt-why">GPT and Claude strongly rewarded implementation continuity and reusable engineering environments.</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="summary-row">
-    <div class="sum-card">
-      <div class="sc-ai"><i class="ti ti-robot" style="color:#185FA5;font-size:16px" aria-hidden="true"></i> <span style="color:#185FA5">GPT</span></div>
-      <div class="sc-logic" style="color:#185FA5">Workflow Survivability</div>
-      <div class="sc-tags">
-        <span class="tag tag-blue">SDK Ecosystem</span>
-        <span class="tag tag-blue">Cross-domain</span>
-        <span class="tag tag-blue">Reusable Arch.</span>
-      </div>
-    </div>
-    <div class="sum-card">
-      <div class="sc-ai"><i class="ti ti-robot" style="color:#BA7517;font-size:16px" aria-hidden="true"></i> <span style="color:#BA7517">Gemini</span></div>
-      <div class="sc-logic" style="color:#BA7517">Architecture Authority</div>
-      <div class="sc-tags">
-        <span class="tag tag-amber">Technical Integrity</span>
-        <span class="tag tag-amber">Validation Logic</span>
-        <span class="tag tag-amber">Topology Auth.</span>
-      </div>
-    </div>
-    <div class="sum-card">
-      <div class="sc-ai"><i class="ti ti-robot" style="color:#0F6E56;font-size:16px" aria-hidden="true"></i> <span style="color:#0F6E56">Claude</span></div>
-      <div class="sc-logic" style="color:#0F6E56">Implementation Continuity</div>
-      <div class="sc-tags">
-        <span class="tag tag-teal">BOM Survivability</span>
-        <span class="tag tag-teal">Deployment</span>
-        <span class="tag tag-teal">Execution Persist.</span>
-      </div>
-    </div>
+  <div class="page-footer-insight">
+    <i class="ti ti-flag"></i>
+    <p><strong>Conclusion insight:</strong> The GEO frontier for semiconductors has shifted from keyword visibility to engineering workflow ownership. Brands that invest in architecture-to-implementation content continuity — across all three AI reasoning systems — will achieve compounding survival advantage as AI-assisted engineering workflows become standard practice.</p>
   </div>
 </div>
 
 <script>
+// ── BRAND LOGO HELPER ────────────────────────────────────────
+// Using official brand colors as SVG text fallbacks (reliable cross-env)
+const LOGOS = {
+  TI:      { bg:'#C8102E', color:'#fff',  text:'TI' },
+  ADI:     { bg:'#0033A0', color:'#fff',  text:'ADI' },
+  Infineon:{ bg:'#009999', color:'#fff',  text:'IFX' },
+  NXP:     { bg:'#FF6600', color:'#fff',  text:'NXP' },
+  NVIDIA:  { bg:'#76B900', color:'#fff',  text:'NVD' },
+  Vicor:   { bg:'#6B2D8B', color:'#fff',  text:'VCR' },
+  Renesas: { bg:'#003087', color:'#fff',  text:'RNS' },
+};
+function logoSVG(brand, h=16, w=46){
+  const l = LOGOS[brand] || {bg:'#888',color:'#fff',text:brand.slice(0,3)};
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${w}" height="${h}" rx="3" fill="${l.bg}"/>
+    <text x="${w/2}" y="${h*0.72}" font-family="Arial,sans-serif" font-weight="700" font-size="${h*0.58}px" fill="${l.color}" text-anchor="middle">${l.text}</text>
+  </svg>`;
+}
+
+// ── DATA ─────────────────────────────────────────────────────
+const INTEGRATED = [
+  // Combined Visibility = avg of GPT+Gemini+Claude vis shares; Survival = avg of three survival shares
+  { brand:'ADI',      vis_gpt:30.8, sur_gpt:38.7, vis_gem:30.5, sur_gem:28.0, vis_cla:23.1, sur_cla:20.2, identity:'Validation Authority' },
+  { brand:'Infineon', vis_gpt:18.9, sur_gpt:20.3, vis_gem:27.1, sur_gem:30.8, vis_cla:30.1, sur_cla:31.2, identity:'Power Architecture Owner' },
+  { brand:'TI',       vis_gpt:27.1, sur_gpt:29.4, vis_gem:16.6, sur_gem:9.8,  vis_cla:10.3, sur_cla:10.1, identity:'Workflow Backbone' },
+  { brand:'NVIDIA',   vis_gpt:9.3,  sur_gpt:11.6, vis_gem:11.1, sur_gem:12.6, vis_cla:0,    sur_cla:0,    identity:'AI-native Workflow Owner' },
+  { brand:'NXP',      vis_gpt:5.2,  sur_gpt:0,    vis_gem:7.5,  sur_gem:9.8,  vis_cla:18.6, sur_cla:19.7, identity:'Connectivity Arch. Owner' },
+];
+// Compute integrated averages
+INTEGRATED.forEach(d => {
+  const vVals = [d.vis_gpt, d.vis_gem, d.vis_cla].filter(v=>v>0);
+  const sVals = [d.sur_gpt, d.sur_gem, d.sur_cla].filter(v=>v>0);
+  d.vis_avg = (vVals.reduce((a,b)=>a+b,0)/vVals.length).toFixed(1);
+  d.sur_avg = (sVals.reduce((a,b)=>a+b,0)/sVals.length).toFixed(1);
+});
+// Sort by survival avg desc
+INTEGRATED.sort((a,b) => parseFloat(b.sur_avg) - parseFloat(a.sur_avg));
+
+const SHARE_DATA = [
+  { ai:'GPT',    cls:'gpt', color:'#378ADD',
+    brands:[
+      {b:'ADI',     vis:30.8, sur:38.7},
+      {b:'TI',      vis:27.1, sur:29.4},
+      {b:'Infineon',vis:18.9, sur:20.3},
+      {b:'NVIDIA',  vis:9.3,  sur:11.6},
+      {b:'Renesas', vis:5.5,  sur:null},
+      {b:'NXP',     vis:5.2,  sur:null},
+    ]},
+  { ai:'Gemini', cls:'gem', color:'#EF9F27',
+    brands:[
+      {b:'ADI',     vis:30.5, sur:28.0},
+      {b:'Infineon',vis:27.1, sur:30.8},
+      {b:'NVIDIA',  vis:11.1, sur:12.6},
+      {b:'TI',      vis:16.6, sur:9.8},
+      {b:'NXP',     vis:7.5,  sur:9.8},
+      {b:'Renesas', vis:7.3,  sur:9.0},
+    ]},
+  { ai:'Claude', cls:'cla', color:'#1D9E75',
+    brands:[
+      {b:'Infineon',vis:30.1, sur:31.2},
+      {b:'ADI',     vis:23.1, sur:20.2},
+      {b:'NXP',     vis:18.6, sur:19.7},
+      {b:'Vicor',   vis:10.3, sur:10.7},
+      {b:'TI',      vis:10.3, sur:10.1},
+      {b:'Renesas', vis:7.7,  sur:8.1},
+    ]},
+];
+
 const MATRIX_DATA = [
-  {domain:"Real-time motor control",tech:"FOC, PWM, DSP, encoder control",comp:"MCU, DSP, motor ctrl IC",
-   gpt:{b:"TI",bc:"bp-ti",v:"46%",s:"38%"},gem:{b:"TI",bc:"bp-ti",v:"42%",s:"35%"},cla:{b:"TI",bc:"bp-ti",v:"44%",s:"36%"},same:true},
-  {domain:"Industrial motor drive / Servo",tech:"Inverter, SiC, thermal efficiency",comp:"SiC MOSFET, gate driver",
-   gpt:{b:"Infineon",bc:"bp-inf",v:"42%",s:"36%"},gem:{b:"Infineon",bc:"bp-inf",v:"45%",s:"38%"},cla:{b:"Infineon",bc:"bp-inf",v:"46%",s:"39%"},same:true},
-  {domain:"Power conversion & Inverter",tech:"DC-DC, LLC, power topology",comp:"Controller, GaN/SiC FET, PMIC",
-   gpt:{b:"TI",bc:"bp-ti",v:"38%",s:"34%"},gem:{b:"Infineon",bc:"bp-inf",v:"48%",s:"40%"},cla:{b:"Infineon",bc:"bp-inf",v:"49%",s:"41%"},same:false},
-  {domain:"Precision feedback & Monitoring",tech:"Signal integrity, sigma-delta",comp:"Precision ADC, amplifier",
-   gpt:{b:"ADI",bc:"bp-adi",v:"54%",s:"36%"},gem:{b:"ADI",bc:"bp-adi",v:"58%",s:"34%"},cla:{b:"ADI",bc:"bp-adi",v:"56%",s:"35%"},same:true},
-  {domain:"Protection & Isolation",tech:"Isolation, safety, fault tolerance",comp:"Digital isolator, isolated driver",
-   gpt:{b:"ADI",bc:"bp-adi",v:"38%",s:"35%"},gem:{b:"ADI",bc:"bp-adi",v:"41%",s:"38%"},cla:{b:"ADI",bc:"bp-adi",v:"43%",s:"37%"},same:true},
-  {domain:"Industrial connectivity",tech:"TSN, EtherCAT, industrial net.",comp:"Ethernet PHY, protocol IC",
-   gpt:{b:"ADI",bc:"bp-adi",v:"32%",s:"36%"},gem:{b:"NXP",bc:"bp-nxp",v:"37%",s:"35%"},cla:{b:"NXP",bc:"bp-nxp",v:"39%",s:"36%"},same:false},
-  {domain:"PLC / Factory automation",tech:"Industrial automation, gateway",comp:"Industrial MCU/MPU, I/O ctrl",
-   gpt:{b:"TI",bc:"bp-ti",v:"34%",s:"32%"},gem:{b:"Renesas",bc:"bp-ren",v:"36%",s:"32%"},cla:{b:"Infineon",bc:"bp-inf",v:"34%",s:"31%"},same:false},
-  {domain:"Predictive maintenance",tech:"Vibration analytics, FFT sensing",comp:"MEMS sensor, vibration IC",
-   gpt:{b:"ADI",bc:"bp-adi",v:"49%",s:"30%"},gem:{b:"ADI",bc:"bp-adi",v:"52%",s:"28%"},cla:{b:"Renesas",bc:"bp-ren",v:"33%",s:"29%"},same:false},
-  {domain:"Industrial edge AI inference",tech:"Edge AI, robotics vision, NPU",comp:"AI SoC, edge inference proc.",
-   gpt:{b:"NVIDIA",bc:"bp-nvi",v:"52%",s:"41%"},gem:{b:"NVIDIA",bc:"bp-nvi",v:"55%",s:"45%"},cla:{b:"NXP",bc:"bp-nxp",v:"41%",s:"34%"},same:false},
-  {domain:"AI infrastructure power",tech:"48V rack power, power density",comp:"GaN FET, high-density module",
-   gpt:{b:"Infineon",bc:"bp-inf",v:"30%",s:"36%"},gem:{b:"Infineon",bc:"bp-inf",v:"41%",s:"32%"},cla:{b:"Vicor",bc:"bp-vic",v:"44%",s:"38%"},same:false},
+  {domain:'Real-time Motor Control',         tech:'FOC, PWM, deterministic latency, encoder control',  comp:'MCU, DSP, motor control IC',
+   gpt:{b:'TI',bc:'bp-ti',v:'46%',s:'38%'},  gem:{b:'TI',bc:'bp-ti',v:'42%',s:'35%'},  cla:{b:'TI',bc:'bp-ti',v:'44%',s:'36%'}, same:true},
+  {domain:'Industrial Motor Drive / Servo',  tech:'Inverter, SiC MOSFET, thermal efficiency',           comp:'SiC MOSFET, gate driver, inverter module',
+   gpt:{b:'Infineon',bc:'bp-inf',v:'42%',s:'36%'}, gem:{b:'Infineon',bc:'bp-inf',v:'45%',s:'38%'}, cla:{b:'Infineon',bc:'bp-inf',v:'46%',s:'39%'}, same:true},
+  {domain:'Power Conversion & Inverter',     tech:'DC-DC, LLC, power topology, resonant converter',     comp:'Controller IC, GaN/SiC FET, PMIC',
+   gpt:{b:'TI',bc:'bp-ti',v:'38%',s:'34%'},  gem:{b:'Infineon',bc:'bp-inf',v:'48%',s:'40%'}, cla:{b:'Infineon',bc:'bp-inf',v:'49%',s:'41%'}, same:false},
+  {domain:'Precision Feedback & Monitoring', tech:'Signal integrity, sigma-delta ADC, sensing',          comp:'Precision ADC, amplifier, sensing IC',
+   gpt:{b:'ADI',bc:'bp-adi',v:'54%',s:'36%'}, gem:{b:'ADI',bc:'bp-adi',v:'58%',s:'34%'}, cla:{b:'ADI',bc:'bp-adi',v:'56%',s:'35%'}, same:true},
+  {domain:'Protection & Isolation',          tech:'Isolation, functional safety, fault tolerance',       comp:'Digital isolator, isolated gate driver',
+   gpt:{b:'ADI',bc:'bp-adi',v:'38%',s:'35%'}, gem:{b:'ADI',bc:'bp-adi',v:'41%',s:'38%'}, cla:{b:'ADI',bc:'bp-adi',v:'43%',s:'37%'}, same:true},
+  {domain:'Industrial Connectivity',         tech:'TSN, EtherCAT, industrial Ethernet networking',       comp:'Ethernet PHY, industrial protocol IC',
+   gpt:{b:'ADI',bc:'bp-adi',v:'32%',s:'36%'}, gem:{b:'NXP',bc:'bp-nxp',v:'37%',s:'35%'}, cla:{b:'NXP',bc:'bp-nxp',v:'39%',s:'36%'}, same:false},
+  {domain:'PLC / Factory Automation',        tech:'Industrial automation, gateway control',              comp:'Industrial MCU/MPU, I/O controller',
+   gpt:{b:'TI',bc:'bp-ti',v:'34%',s:'32%'},   gem:{b:'Renesas',bc:'bp-ren',v:'36%',s:'32%'}, cla:{b:'Infineon',bc:'bp-inf',v:'34%',s:'31%'}, same:false},
+  {domain:'Predictive Maintenance',          tech:'Vibration analytics, FFT sensing, MEMS',             comp:'MEMS sensor, vibration monitoring IC',
+   gpt:{b:'ADI',bc:'bp-adi',v:'49%',s:'30%'}, gem:{b:'ADI',bc:'bp-adi',v:'52%',s:'28%'}, cla:{b:'Renesas',bc:'bp-ren',v:'33%',s:'29%'}, same:false},
+  {domain:'Industrial Edge AI Inference',    tech:'Edge AI, robotics vision, NPU inference',            comp:'AI SoC, edge inference processor',
+   gpt:{b:'NVIDIA',bc:'bp-nvi',v:'52%',s:'41%'}, gem:{b:'NVIDIA',bc:'bp-nvi',v:'55%',s:'45%'}, cla:{b:'NXP',bc:'bp-nxp',v:'41%',s:'34%'}, same:false},
+  {domain:'AI Infrastructure Power',         tech:'48V rack power, high-density power delivery',        comp:'GaN FET, high-density power module',
+   gpt:{b:'Infineon',bc:'bp-inf',v:'30%',s:'36%'}, gem:{b:'Infineon',bc:'bp-inf',v:'41%',s:'32%'}, cla:{b:'Vicor',bc:'bp-vic',v:'44%',s:'38%'}, same:false},
 ];
 
 const RANK_DATA = [
-  {ai:"GPT",cls:"gpt",hcls:"rank-header-gpt",sub:"Workflow continuity-driven",
+  {ai:'GPT',  cls:'gpt', hcls:'rank-header-gpt', sub:'Workflow continuity-driven',
    brands:[
-     {b:"TI",tag:"Workflow Backbone",v:"46%",s:"38%",bc:"bp-ti"},
-     {b:"ADI",tag:"Validation Authority",v:"54%",s:"36%",bc:"bp-adi"},
-     {b:"Infineon",tag:"Power Arch. Owner",v:"42%",s:"36%",bc:"bp-inf"},
-     {b:"NVIDIA",tag:"AI-native Workflow",v:"52%",s:"41%",bc:"bp-nvi"},
-     {b:"Vicor",tag:"AI Power Specialist",v:"18%",s:"28%",bc:"bp-vic"},
+     {b:'TI',       tag:'Workflow Backbone',    v:'46%', s:'38%', bc:'bp-ti'},
+     {b:'ADI',      tag:'Validation Authority', v:'54%', s:'36%', bc:'bp-adi'},
+     {b:'Infineon', tag:'Power Arch. Owner',    v:'42%', s:'36%', bc:'bp-inf'},
+     {b:'NVIDIA',   tag:'AI-native Workflow',   v:'52%', s:'41%', bc:'bp-nvi'},
+     {b:'Vicor',    tag:'AI Power Specialist',  v:'18%', s:'28%', bc:'bp-vic'},
    ]},
-  {ai:"Gemini",cls:"gem",hcls:"rank-header-gem",sub:"Architecture authority-driven",
+  {ai:'Gemini',cls:'gem',hcls:'rank-header-gem',sub:'Architecture authority-driven',
    brands:[
-     {b:"ADI",tag:"Validation Authority",v:"58%",s:"34%",bc:"bp-adi"},
-     {b:"NVIDIA",tag:"AI-native Workflow",v:"55%",s:"45%",bc:"bp-nvi"},
-     {b:"Infineon",tag:"Power Arch. Owner",v:"48%",s:"40%",bc:"bp-inf"},
-     {b:"NXP",tag:"Connectivity Arch.",v:"37%",s:"35%",bc:"bp-nxp"},
-     {b:"TI",tag:"Workflow Backbone",v:"42%",s:"35%",bc:"bp-ti"},
+     {b:'ADI',      tag:'Validation Authority', v:'58%', s:'34%', bc:'bp-adi'},
+     {b:'NVIDIA',   tag:'AI-native Workflow',   v:'55%', s:'45%', bc:'bp-nvi'},
+     {b:'Infineon', tag:'Power Arch. Owner',    v:'48%', s:'40%', bc:'bp-inf'},
+     {b:'NXP',      tag:'Connectivity Arch.',   v:'37%', s:'35%', bc:'bp-nxp'},
+     {b:'TI',       tag:'Workflow Backbone',    v:'42%', s:'35%', bc:'bp-ti'},
    ]},
-  {ai:"Claude",cls:"cla",hcls:"rank-header-cla",sub:"Implementation continuity-driven",
+  {ai:'Claude',cls:'cla',hcls:'rank-header-cla',sub:'Implementation continuity-driven',
    brands:[
-     {b:"Infineon",tag:"Power Arch. Owner",v:"49%",s:"41%",bc:"bp-inf"},
-     {b:"ADI",tag:"Validation Authority",v:"56%",s:"35%",bc:"bp-adi"},
-     {b:"NXP",tag:"Connectivity Arch.",v:"41%",s:"36%",bc:"bp-nxp"},
-     {b:"TI",tag:"Workflow Backbone",v:"44%",s:"36%",bc:"bp-ti"},
-     {b:"Vicor",tag:"AI Power Specialist",v:"44%",s:"38%",bc:"bp-vic"},
+     {b:'Infineon', tag:'Power Arch. Owner',    v:'49%', s:'41%', bc:'bp-inf'},
+     {b:'ADI',      tag:'Validation Authority', v:'56%', s:'35%', bc:'bp-adi'},
+     {b:'NXP',      tag:'Connectivity Arch.',   v:'41%', s:'36%', bc:'bp-nxp'},
+     {b:'TI',       tag:'Workflow Backbone',    v:'44%', s:'36%', bc:'bp-ti'},
+     {b:'Vicor',    tag:'AI Power Specialist',  v:'44%', s:'38%', bc:'bp-vic'},
    ]},
 ];
 
 const WHY_DATA = [
-  {ai:"GPT",cls:"gpt",hcls:"why-header-gpt",icls:"insight-gpt",
-   headline:"Workflow Continuity-driven Survival",
-   topBrand:"TI — 46% visibility / 38% survival",
+  {ai:'GPT', cls:'gpt', hcls:'why-header-gpt', icls:'insight-gpt', sbcls:'sb-gpt', svcls:'sbv-gpt',
+   topBrand:'ADI', topSur:'38.7%',
    drivers:[
-     {icon:"ti-repeat",text:"Reusable workflow continuity"},
-     {icon:"ti-code",text:"SDK ecosystem persistence"},
-     {icon:"ti-file-code",text:"Reference design survivability"},
-     {icon:"ti-topology-ring-3",text:"Cross-domain engineering"},
+     {icon:'ti-repeat',       text:'Reusable engineering workflows'},
+     {icon:'ti-code',         text:'SDK continuity'},
+     {icon:'ti-route',        text:'Cross-domain implementation persistence'},
+     {icon:'ti-shield-check', text:'Workflow survivability'},
    ],
-   bars:[{b:"TI",s:38,bc:"bar-fill-gpt",vc:"bar-val-gpt"},{b:"NVIDIA",s:41,bc:"bar-fill-gpt",vc:"bar-val-gpt"},{b:"ADI",s:36,bc:"bar-fill-gpt",vc:"bar-val-gpt"}],
-   insight:"Brands with broad engineering portfolios and reusable implementation content maintain stronger GPT survival continuity."},
-  {ai:"Gemini",cls:"gem",hcls:"why-header-gem",icls:"insight-gem",
-   headline:"Architecture Authority-driven Survival",
-   topBrand:"Infineon — 48% visibility / 40% survival",
+   bars:[
+     {b:'ADI',      s:38.7, max:45},
+     {b:'TI',       s:29.4, max:45},
+     {b:'Infineon', s:20.3, max:45},
+   ],
+   insight:'Brands with broad engineering portfolios and reusable implementation content maintain stronger GPT survival continuity.'},
+  {ai:'Gemini',cls:'gem',hcls:'why-header-gem',icls:'insight-gem',sbcls:'sb-gem',svcls:'sbv-gem',
+   topBrand:'Infineon', topSur:'30.8%',
    drivers:[
-     {icon:"ti-blueprint",text:"Architecture-level reasoning"},
-     {icon:"ti-certificate",text:"Technical integrity"},
-     {icon:"ti-file-description",text:"Structured engineering docs"},
-     {icon:"ti-topology-complex",text:"Topology-level authority"},
+     {icon:'ti-topology-complex', text:'Architecture-level reasoning'},
+     {icon:'ti-certificate',      text:'Technical integrity'},
+     {icon:'ti-shield',           text:'Validation authority'},
+     {icon:'ti-file-description', text:'Structured engineering documentation'},
    ],
-   bars:[{b:"NVIDIA",s:45,bc:"bar-fill-gem",vc:"bar-val-gem"},{b:"Infineon",s:40,bc:"bar-fill-gem",vc:"bar-val-gem"},{b:"ADI",s:34,bc:"bar-fill-gem",vc:"bar-val-gem"}],
-   insight:"Brands with technically structured portfolios and architecture-centered content maintain stronger Gemini survival authority."},
-  {ai:"Claude",cls:"cla",hcls:"why-header-cla",icls:"insight-cla",
-   headline:"Implementation Continuity-driven Survival",
-   topBrand:"Infineon — 49% visibility / 41% survival",
+   bars:[
+     {b:'Infineon', s:30.8, max:40},
+     {b:'ADI',      s:28.0, max:40},
+     {b:'NVIDIA',   s:12.6, max:40},
+   ],
+   insight:'Brands with technically structured portfolios and architecture-centered content maintain stronger Gemini survival authority.'},
+  {ai:'Claude',cls:'cla',hcls:'why-header-cla',icls:'insight-cla',sbcls:'sb-cla',svcls:'sbv-cla',
+   topBrand:'Infineon', topSur:'31.2%',
    drivers:[
-     {icon:"ti-package",text:"Deployable engineering continuity"},
-     {icon:"ti-checklist",text:"BOM-ready implementation"},
-     {icon:"ti-refresh",text:"Lifecycle continuity"},
-     {icon:"ti-device-floppy",text:"Execution persistence"},
+     {icon:'ti-package',      text:'Implementation continuity'},
+     {icon:'ti-device-floppy',text:'Deployment practicality'},
+     {icon:'ti-checklist',    text:'BOM realism'},
+     {icon:'ti-refresh',      text:'Execution persistence'},
    ],
-   bars:[{b:"Infineon",s:41,bc:"bar-fill-cla",vc:"bar-val-cla"},{b:"Vicor",s:38,bc:"bar-fill-cla",vc:"bar-val-cla"},{b:"NXP",s:36,bc:"bar-fill-cla",vc:"bar-val-cla"}],
-   insight:"Brands with implementation-connected portfolios and deployment-ready documentation maintain stronger Claude survival."},
+   bars:[
+     {b:'Infineon', s:31.2, max:40},
+     {b:'ADI',      s:20.2, max:40},
+     {b:'NXP',      s:19.7, max:40},
+   ],
+   insight:'Brands with implementation-connected portfolios and deployment-ready documentation maintain stronger Claude survival.'},
 ];
 
+const BRAND_IDENTITY = [
+  {b:'TI',       identity:'Workflow Backbone',        tag:'tag-coral',  note:'Real-time control, MCU, DSP ecosystem depth'},
+  {b:'Infineon', identity:'Power Architecture Owner', tag:'tag-teal',   note:'SiC MOSFET, gate driver, GaN topology authority'},
+  {b:'ADI',      identity:'Validation Authority',     tag:'tag-blue',   note:'Precision ADC, sigma-delta, isolation continuity'},
+  {b:'NXP',      identity:'Connectivity Arch. Owner', tag:'tag-amber',  note:'TSN, EtherCAT, industrial protocol stack'},
+  {b:'NVIDIA',   identity:'AI-native Workflow Owner', tag:'tag-gray',   note:'Edge AI SoC, NPU inference, robotics vision'},
+  {b:'Vicor',    identity:'AI Power Density Spec.',   tag:'tag-purple', note:'48V rack power, high-density GaN delivery'},
+];
+
+const AI_GEO_RESULTS = [
+  {ai:'GPT GEO Engineering Workflow Result', cls:'gpt', logic:'Core Logic: Workflow Continuity',
+   brands:[
+     {b:'ADI',      vis:30.8, sur:38.7},
+     {b:'TI',       vis:27.1, sur:29.4},
+     {b:'Infineon', vis:18.9, sur:20.3},
+   ], color:'#378ADD', fill:'gmf-gpt', val:'gmv-gpt'},
+  {ai:'Gemini GEO Engineering Workflow Result', cls:'gem', logic:'Core Logic: Architecture Authority',
+   brands:[
+     {b:'ADI',      vis:30.5, sur:28.0},
+     {b:'Infineon', vis:27.1, sur:30.8},
+     {b:'NVIDIA',   vis:11.1, sur:12.6},
+   ], color:'#EF9F27', fill:'gmf-gem', val:'gmv-gem'},
+  {ai:'Claude GEO Engineering Workflow Result', cls:'cla', logic:'Core Logic: Implementation Feasibility',
+   brands:[
+     {b:'Infineon', vis:30.1, sur:31.2},
+     {b:'ADI',      vis:23.1, sur:20.2},
+     {b:'NXP',      vis:18.6, sur:19.7},
+   ], color:'#1D9E75', fill:'gmf-cla', val:'gmv-cla'},
+];
+
+// ── BUILD FUNCTIONS ──────────────────────────────────────────
+function buildIntRanking(){
+  const c = document.getElementById('int-rank-list');
+  c.innerHTML = INTEGRATED.map((d,i)=>{
+    const isTop = i===0;
+    const visAvg = d.vis_avg; const surAvg = d.sur_avg;
+    return `<div class="int-rank-card${isTop?' top1':''}">
+      <div class="rank-badge${isTop?' r1':''}">
+        ${isTop?'<i class="ti ti-crown"></i>':''} #${i+1}
+      </div>
+      <div class="logo-wrap">${logoSVG(d.brand, 22, 58)}</div>
+      <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:.25rem">${d.identity}</div>
+      <div class="int-rank-metrics">
+        <div class="metric-row"><span class="metric-label">Visibility</span><span class="metric-val metric-vis">${visAvg}%</span></div>
+        <div class="metric-row"><span class="metric-label">Survival</span><span class="metric-val metric-surv">${surAvg}%</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildShareGrid(){
+  const c = document.getElementById('share-grid');
+  c.innerHTML = SHARE_DATA.map(ai=>`
+    <div class="share-col">
+      <div class="share-col-header" style="color:${ai.color}">
+        <i class="ti ti-robot"></i> ${ai.ai}
+      </div>
+      ${ai.brands.map(b=>`
+      <div class="share-row">
+        <div style="width:44px;flex-shrink:0">${logoSVG(b.b,12,42)}</div>
+        <div class="share-bar-wrap">
+          <div class="share-bar-track"><div class="share-bar-vis" style="width:${b.vis}%;background:${ai.color}"></div></div>
+          ${b.sur!=null?`<div class="share-bar-track"><div class="share-bar-surv" style="width:${b.sur}%;background:${ai.color}"></div></div>`:'<div style="height:5px"></div>'}
+        </div>
+        <div class="share-pct" style="color:${ai.color}">${b.sur!=null?b.sur+'%':'—'}</div>
+      </div>`).join('')}
+      <div style="font-size:9.5px;color:var(--color-text-tertiary);margin-top:4px;display:flex;gap:8px">
+        <span>░ Visibility</span><span style="opacity:.85">▓ Survival</span>
+      </div>
+    </div>`).join('');
+}
+
 function buildMatrix(){
-  const tbody=document.getElementById('matrix-body');
-  tbody.innerHTML=MATRIX_DATA.map(r=>`
+  const tbody = document.getElementById('matrix-body');
+  tbody.innerHTML = MATRIX_DATA.map(r=>`
     <tr>
-      <td><div class="domain-cell">${r.domain}</div><div class="comp-cell">${r.tech}</div></td>
+      <td>
+        <div class="domain-cell">${r.domain}</div>
+        <div class="tech-cell">${r.tech}</div>
+      </td>
       <td class="comp-cell">${r.comp}</td>
       <td></td>
-      <td><div class="vs-cell"><span class="brand-pill ${r.gpt.bc}">${r.gpt.b}</span><span class="vis-num">V ${r.gpt.v}</span><span class="surv-num surv-blue">S ${r.gpt.s}</span></div></td>
-      <td><div class="vs-cell"><span class="brand-pill ${r.gem.bc}">${r.gem.b}</span><span class="vis-num">V ${r.gem.v}</span><span class="surv-num surv-amber">S ${r.gem.s}</span></div></td>
-      <td><div class="vs-cell"><span class="brand-pill ${r.cla.bc}">${r.cla.b}</span><span class="vis-num">V ${r.cla.v}</span><span class="surv-num surv-teal">S ${r.cla.s}</span></div></td>
-      <td style="text-align:center"><span class="diff-dot ${r.same?'dot-same':'dot-diff'}"></span></td>
+      <td>
+        <div class="vs-cell">
+          <span class="brand-pill ${r.gpt.bc}">${logoSVG(r.gpt.b,13,36)} ${r.gpt.b}</span>
+          <span class="vis-row">Visibility ${r.gpt.v}</span>
+          <span class="surv-row surv-blue">Survival ${r.gpt.s}</span>
+        </div>
+      </td>
+      <td>
+        <div class="vs-cell">
+          <span class="brand-pill ${r.gem.bc}">${logoSVG(r.gem.b,13,36)} ${r.gem.b}</span>
+          <span class="vis-row">Visibility ${r.gem.v}</span>
+          <span class="surv-row surv-amber">Survival ${r.gem.s}</span>
+        </div>
+      </td>
+      <td>
+        <div class="vs-cell">
+          <span class="brand-pill ${r.cla.bc}">${logoSVG(r.cla.b,13,36)} ${r.cla.b}</span>
+          <span class="vis-row">Visibility ${r.cla.v}</span>
+          <span class="surv-row surv-teal">Survival ${r.cla.s}</span>
+        </div>
+      </td>
+      <td class="signal-cell"><span class="sig-dot ${r.same?'dot-same':'dot-diff'}" title="${r.same?'Consistent':'Divergent'}"></span></td>
     </tr>`).join('');
 }
 
+function buildAiGeoGrid(){
+  const c = document.getElementById('ai-geo-grid');
+  c.innerHTML = AI_GEO_RESULTS.map(e=>`
+    <div class="ai-geo-card">
+      <div class="ai-geo-header ${e.cls}">
+        <div>
+          <div class="gh-title">${e.ai}</div>
+          <div class="gh-sub">${e.logic}</div>
+        </div>
+      </div>
+      <div class="ai-geo-body">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.07em;color:var(--color-text-tertiary);text-transform:uppercase;margin-bottom:.5rem">Survival Share</div>
+        ${e.brands.map(b=>`
+        <div class="geo-metric-row">
+          <div class="geo-logo-wrap">${logoSVG(b.b,13,48)}</div>
+          <div class="gmt"><div class="${e.fill}" style="height:100%;width:${b.sur/40*100}%;border-radius:4px"></div></div>
+          <span class="${e.val}">${b.sur}%</span>
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
 function buildRanks(){
-  const g=document.getElementById('rank-grid');
-  g.innerHTML=RANK_DATA.map(col=>`
+  const g = document.getElementById('rank-grid');
+  g.innerHTML = RANK_DATA.map(col=>`
     <div class="rank-col">
       <div class="rank-header ${col.hcls}">
-        <div>
-          <div class="ai-label"><i class="ti ti-robot" aria-hidden="true"></i> ${col.ai}</div>
-          <div class="ai-sub">${col.sub}</div>
-        </div>
+        <div class="ai-label"><i class="ti ti-robot"></i> ${col.ai}</div>
+        <div class="ai-sub">${col.sub}</div>
       </div>
       ${col.brands.map((b,i)=>`
       <div class="rank-item">
-        <span class="rank-num">#${i+1}</span>
-        <div style="flex:1;min-width:0">
-          <div class="rank-brand"><span class="brand-pill ${b.bc}" style="margin-bottom:0">${b.b}</span></div>
+        <span class="rank-num${i===0?' r1':''}">${i===0?'👑':'#'+(i+1)}</span>
+        <div style="flex:1;min-width:0;padding:0 6px">
+          <div class="rank-logo-wrap">${logoSVG(b.b,16,50)}</div>
           <div class="rank-tag">${b.tag}</div>
         </div>
         <div class="vs-pair">
-          <span class="vs-v">V ${b.v}</span>
-          <span class="vs-s-${col.cls}">S ${b.s}</span>
+          <span class="vs-vis">Visibility ${b.v}</span>
+          <span class="vs-surv vs-surv-${col.cls}">Survival ${b.s}</span>
         </div>
       </div>`).join('')}
     </div>`).join('');
 }
 
 function buildWhy(){
-  const g=document.getElementById('why-grid');
-  g.innerHTML=WHY_DATA.map(e=>`
+  const g = document.getElementById('why-grid');
+  g.innerHTML = WHY_DATA.map(e=>`
     <div class="why-card">
       <div class="why-header ${e.hcls}">
-        <div class="wh-name"><i class="ti ti-robot" aria-hidden="true"></i> ${e.ai}</div>
-        <div class="wh-sub">${e.headline}</div>
+        <div class="wh-name"><i class="ti ti-robot"></i> ${e.ai}</div>
+        <div class="wh-sub">${e.ai} Survival Pattern</div>
       </div>
       <div class="why-body">
-        <div class="top-brand-bar">
-          <span class="tb-label"><i class="ti ti-award" aria-hidden="true"></i> Top survival</span>
-          <span class="tb-val">${e.topBrand}</span>
+        <div class="top-survival-bar">
+          <span class="ts-crown">👑</span>
+          <div class="ts-logo-wrap">${logoSVG(e.topBrand,15,48)}</div>
+          <span class="ts-val">Survival ${e.topSur}</span>
         </div>
-        <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:.4rem;letter-spacing:.06em">CORE REASONING DRIVERS</div>
+        <div class="driver-section-label">Core reasoning drivers</div>
         <ul class="driver-list">
-          ${e.drivers.map(d=>`<li><i class="ti ${d.icon} driver-icon" aria-hidden="true"></i>${d.text}</li>`).join('')}
+          ${e.drivers.map(d=>`<li><i class="ti ${d.icon} driver-icon"></i>${d.text}</li>`).join('')}
         </ul>
-        <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:.4rem;letter-spacing:.06em">BRAND SURVIVAL</div>
+        <div class="driver-section-label">Strongest survival</div>
         ${e.bars.map(b=>`
-        <div class="bar-chart-row">
-          <span class="bar-label">${b.b}</span>
-          <div class="bar-track"><div class="bar-fill ${b.bc}" style="width:${b.s/55*100}%"></div></div>
-          <span class="bar-val ${b.vc}">${b.s}%</span>
+        <div class="surv-bar-row">
+          <div class="sbl">${logoSVG(b.b,12,46)}</div>
+          <div class="sb-track"><div class="sb-fill ${e.sbcls}" style="width:${b.s/b.max*100}%"></div></div>
+          <span class="sb-val ${e.svcls}">${b.s}%</span>
         </div>`).join('')}
-        <div class="${e.icls} insight-box" style="margin-top:.7rem">${e.insight}</div>
+        <div class="${e.icls} insight-box">${e.insight}</div>
+      </div>
+    </div>`).join('');
+}
+
+function buildBrandIdentity(){
+  const g = document.getElementById('brand-identity-grid');
+  g.innerHTML = BRAND_IDENTITY.map(b=>`
+    <div style="display:flex;align-items:flex-start;gap:9px;padding:.75rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary)">
+      <div style="flex-shrink:0;margin-top:2px">${logoSVG(b.b,18,52)}</div>
+      <div>
+        <div class="tag ${b.tag}" style="margin:0 0 4px 0">${b.identity}</div>
+        <div style="font-size:11px;color:var(--color-text-secondary)">${b.note}</div>
       </div>
     </div>`).join('');
 }
@@ -551,9 +1056,18 @@ function showPage(n,btn){
   for(let i=0;i<5;i++) document.getElementById('page-'+i).style.display=i===n?'block':'none';
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  window.scrollTo(0,0);
 }
 
+// ── INIT ─────────────────────────────────────────────────────
+buildIntRanking();
+buildShareGrid();
 buildMatrix();
+buildAiGeoGrid();
 buildRanks();
 buildWhy();
+buildBrandIdentity();
 </script>
+</body>
+</html>
+
